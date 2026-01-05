@@ -113,6 +113,7 @@ SpecFirst will never:
 ## Documentation
 
 - [User Guide](docs/GUIDE.md): Detailed "how-to" and workflow examples.
+- [Common Workflows](docs/WORKFLOWS.md): Practical patterns for real-world scenarios.
 - [Protocol Reference](docs/PROTOCOLS.md): YAML schema and stage definitions.
 - [Template Reference](docs/TEMPLATES.md): Guide to authoring stage templates.
 
