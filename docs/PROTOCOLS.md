@@ -57,3 +57,23 @@ approvals:
   - stage: outline
     role: lead
 ```
+
+## Protocol Evolution & Versioning
+
+As projects grow, your protocols will need to evolve. Proper versioning ensures that active work isn't disrupted by changes to the underlying workflow.
+
+### Guidance on Versioning
+
+1.  **Semantic Versioning:** Treat protocols like APIs.
+    *   **Patch (1.0.1):** Typofixes in templates or human-readable stage names.
+    *   **Minor (1.1.0):** Adding a new optional stage or approval.
+    *   **Major (2.0.0):** Removing stages, changing `depends_on` relationships, or modifying `inputs`/`outputs` in a way that breaks existing `state.json` files.
+
+2.  **Immutability:** Once a protocol is used in production, avoid making breaking changes to that specific version. Instead, create a new version and migrate.
+
+### Migration Strategies
+
+*   **Long-Lived Projects:** For projects that take weeks or months, it is often safer to finish the project using the protocol version it started with.
+*   **Protocol Overrides:** Use the `--protocol` flag to explicitly point to an older version if you need to maintain compatibility with an archived state.
+*   **Manual State Correction:** In extreme cases, you may need to manually update the `state.json` or move artifacts to match the new protocol's expectations before running `spec init` or `spec complete`.
+
