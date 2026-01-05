@@ -117,44 +117,6 @@ Focus on:
 
 Be precise and actionable. Include specific values, formats, and constraints.`,
 
-	"ai": `Summarize this specification for an **AI coding assistant**.
-
-Focus on constraint-dense, actionable information:
-
-## Invariants (MUST always be true)
-List all invariants as clear assertions:
-- "X must never be null"
-- "Y must always be positive"
-- "Z must be unique across..."
-
-## Constraints (MUST NOT violate)
-List hard constraints:
-- Size limits
-- Time limits
-- Format requirements
-- Security boundaries
-
-## Decision Boundaries
-Clarify ambiguous areas with explicit rules:
-- "If X then Y, else Z"
-- "Prefer A over B when..."
-- "Default to C unless..."
-
-## Output Contract
-Define expected outputs precisely:
-- Required fields and types
-- Valid value ranges
-- Format specifications
-
-## Error Handling Contract
-Define error behavior:
-- Errors that should be thrown
-- Errors that should be logged
-- Errors that should be retried
-
-Keep the summary dense and machine-parseable.
-Avoid narrative prose. Use structured formats.`,
-
 	"qa": `Summarize this specification for a **QA engineer**.
 
 Focus on:
