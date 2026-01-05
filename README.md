@@ -125,6 +125,8 @@ Complete, runnable examples with protocols and templates:
 - [Bug Fix](examples/bug-fix/README.md): Minimal 2-stage workflow for systematic bug fixes
 - [API Feature](examples/api-feature/README.md): Complete feature development with approvals and task decomposition
 - [Spec Review](examples/spec-review/README.md): Using cognitive scaffold commands to improve specification quality
+- [Refactoring](examples/refactoring/README.md): Structured code improvement with risk mitigation and verification
+- [Database Migration](examples/database-migration/README.md): Safe schema changes with approval gates and rollback planning
 
 ## Install
 

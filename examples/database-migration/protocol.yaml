@@ -1,0 +1,43 @@
+name: "database-migration"
+version: "1.0"
+
+stages:
+  - id: requirements
+    name: Migration Requirements
+    type: spec
+    intent: exploration
+    template: requirements.md
+    outputs: [requirements.md]
+    
+  - id: migration-plan
+    name: Migration Plan
+    type: spec
+    intent: planning
+    template: migration-plan.md
+    depends_on: [requirements]
+    inputs: [requirements.md]
+    outputs: [migration-plan.md]
+    
+  - id: rollback-plan
+    name: Rollback Strategy
+    type: spec
+    intent: planning
+    template: rollback-plan.md
+    depends_on: [migration-plan]
+    inputs: [migration-plan.md]
+    outputs: [rollback-plan.md]
+    
+  - id: execute
+    name: Execute Migration
+    type: spec
+    intent: execution
+    template: execute.md
+    depends_on: [migration-plan, rollback-plan]
+    inputs: [migration-plan.md, rollback-plan.md]
+    outputs: []
+
+approvals:
+  - stage: migration-plan
+    role: dba
+  - stage: rollback-plan
+    role: ops
