@@ -1,0 +1,12 @@
+# Binaries
+/specfirst
+*.exe
+
+# Build output
+/dist/
+
+# Go build cache (local override)
+/.gocache/
+
+# Editor
+.DS_Store
