@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+
+	"specfirst/internal/prompts"
 )
 
 var diffCmd = &cobra.Command{
@@ -31,7 +33,13 @@ The output is a structured prompt suitable for AI assistants or human reviewers.
 			return fmt.Errorf("reading new spec %s: %w", newPath, err)
 		}
 
-		prompt := generateDiffPrompt(string(oldContent), string(newContent), oldPath, newPath)
+		prompt, err := prompts.Render("change-impact.md", prompts.DiffData{
+			SpecBefore: string(oldContent),
+			SpecAfter:  string(newContent),
+		})
+		if err != nil {
+			return fmt.Errorf("rendering diff prompt: %w", err)
+		}
 
 		prompt = applyMaxChars(prompt, stageMaxChars)
 		formatted, err := formatPrompt(stageFormat, "diff", prompt)
@@ -47,33 +55,4 @@ The output is a structured prompt suitable for AI assistants or human reviewers.
 		_, err = cmd.OutOrStdout().Write([]byte(formatted))
 		return err
 	},
-}
-
-func generateDiffPrompt(oldContent, newContent, oldPath, newPath string) string {
-	return fmt.Sprintf(`Given the following previous specification and proposed changes, evaluate:
-
-1. **Behavioral differences** — What has changed in expected system behavior?
-2. **Backward compatibility risks** — What existing functionality might break?
-3. **Required code changes** — What implementation updates are needed?
-4. **Tests that must be updated or added** — What test coverage is affected?
-
-For each identified change:
-- Describe the nature of the change (addition, removal, modification)
-- Assess the impact scope (isolated, cross-cutting, breaking)
-- Suggest migration steps if applicable
-
----
-
-## Previous Specification
-**Source**: %s
-
-%s
-
----
-
-## Proposed Specification
-**Source**: %s
-
-%s
-`, oldPath, oldContent, newPath, newContent)
 }

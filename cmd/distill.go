@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"specfirst/internal/prompts"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -189,9 +190,16 @@ Organize by testability. Flag areas that are hard to test.`,
 
 func generateDistillPrompt(content, path, audience string) (string, error) {
 	audienceLower := strings.ToLower(strings.TrimSpace(audience))
+
+	// AI audience uses the gold-standard template
+	if audienceLower == "ai" {
+		return prompts.Render("ai-distillation.md", prompts.SpecData{Spec: content})
+	}
+
 	audienceInstructions, ok := distillAudiences[audienceLower]
 	if !ok {
-		validAudiences := make([]string, 0, len(distillAudiences))
+		validAudiences := make([]string, 0, len(distillAudiences)+1)
+		validAudiences = append(validAudiences, "ai")
 		for k := range distillAudiences {
 			validAudiences = append(validAudiences, k)
 		}

@@ -113,7 +113,6 @@ SpecFirst will never:
 ## Documentation
 
 - [User Guide](docs/GUIDE.md): Detailed "how-to" and workflow examples.
-- [Common Workflows](docs/WORKFLOWS.md): Practical patterns for real-world scenarios.
 - [Protocol Reference](docs/PROTOCOLS.md): YAML schema and stage definitions.
 - [Template Reference](docs/TEMPLATES.md): Guide to authoring stage templates.
 
@@ -297,7 +296,7 @@ These commands generate **prompts only** — no state, no enforcement, no AI cal
 - `specfirst test-intent <spec-file>` generates a test **intent** prompt (not test code).
 - `specfirst trace <spec-file>` generates a spec-to-code mapping prompt.
 - `specfirst distill <spec-file> --audience <a>` generates an audience-specific summary prompt. Audiences: `exec`, `implementer`, `ai`, `qa`.
-- `specfirst calibrate <artifact> [--mode <m>]` generates an epistemic annotation prompt for judgment calibration. Modes: `default`, `confidence`, `uncertainty`, `unknowns`.
+- `specfirst calibrate <artifact>` generates a comprehensive epistemic map for judgment calibration.
 
 ## Completion Options
 

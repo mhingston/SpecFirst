@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+
+	"specfirst/internal/prompts"
 )
 
 var assumptionsCmd = &cobra.Command{
@@ -28,7 +30,12 @@ The output is a structured prompt suitable for AI assistants or human reviewers.
 			return fmt.Errorf("reading spec %s: %w", specPath, err)
 		}
 
-		prompt := generateAssumptionsPrompt(string(content), specPath)
+		prompt, err := prompts.Render("assumptions-extraction.md", prompts.SpecData{
+			Spec: string(content),
+		})
+		if err != nil {
+			return fmt.Errorf("rendering assumptions prompt: %w", err)
+		}
 
 		prompt = applyMaxChars(prompt, stageMaxChars)
 		formatted, err := formatPrompt(stageFormat, "assumptions", prompt)
@@ -44,50 +51,4 @@ The output is a structured prompt suitable for AI assistants or human reviewers.
 		_, err = cmd.OutOrStdout().Write([]byte(formatted))
 		return err
 	},
-}
-
-func generateAssumptionsPrompt(content, path string) string {
-	return fmt.Sprintf(`List all implicit assumptions in this specification.
-
-For each assumption identified:
-
-### 1. State the Assumption
-Clearly articulate what is being assumed but not explicitly stated.
-
-### 2. Why It Matters
-Explain the consequence if this assumption is relied upon.
-
-### 3. What Breaks If It's Wrong
-Describe the failure modes if this assumption proves false:
-- Technical failures
-- User experience degradation
-- Security vulnerabilities
-- Performance issues
-
-### 4. How to Validate It
-Provide concrete steps to verify or falsify the assumption:
-- Questions to ask stakeholders
-- Tests to write
-- Metrics to observe
-- Prototypes to build
-
----
-
-## Categories to Consider
-
-- **Environmental assumptions** (OS, runtime, network, hardware)
-- **User behavior assumptions** (expertise, intent, workflow)
-- **Data assumptions** (volume, format, quality, freshness)
-- **Integration assumptions** (APIs, dependencies, versions)
-- **Performance assumptions** (latency, throughput, scale)
-- **Security assumptions** (threat model, trust boundaries)
-- **Temporal assumptions** (timing, ordering, concurrency)
-
----
-
-## Specification
-**Source**: %s
-
-%s
-`, path, content)
 }

@@ -59,3 +59,58 @@ When a spec version is finalized, archive it:
 specfirst complete-spec --archive --version 1.0
 ```
 This creates a snapshot of the entire workspace.
+
+## Team Collaboration
+
+**Use case**: Multiple developers working on different tasks from decomposition.
+
+```bash
+# Team Lead:
+specfirst init
+specfirst requirements | claude -p > requirements.md
+specfirst complete requirements ./requirements.md
+specfirst decompose | claude -p > tasks.yaml
+specfirst complete decompose ./tasks.yaml
+
+# Share task list with team
+specfirst task  # Shows all available tasks
+
+# Developer A:
+specfirst task T1 | claude -p  # Work on task T1
+
+# Developer B:
+specfirst task T2 | claude -p  # Work on task T2 (parallel)
+
+# Team Lead (after completion):
+specfirst check  # Validate all outputs
+specfirst complete-spec --archive --version 0.1.0
+```
+
+## CI/CD Integration
+
+**Use case**: Automated quality checks in build pipeline.
+
+```bash
+# In your CI pipeline (e.g., .github/workflows/spec-check.yml):
+
+- name: Check spec quality
+  run: |
+    specfirst check --fail-on-warnings
+    
+- name: Validate all stages complete
+  run: |
+    specfirst complete-spec --warn-only || exit 1
+    
+- name: Archive on release
+  if: startsWith(github.ref, 'refs/tags/')
+  run: |
+    specfirst complete-spec --archive --version ${{ github.ref_name }}
+```
+
+## Best Practices
+
+1. **Always run `specfirst check` before archiving** - Catches missing outputs or approvals
+2. **Use `--prompt-file` when completing stages** - Enables prompt hash verification
+3. **Archive at milestones** - Creates rollback points for major versions
+4. **Leverage cognitive commands iteratively** - Run assumptions/review multiple times as specs evolve
+5. **Prefer `--out` for complex prompts** - Easier to review before sending to AI
