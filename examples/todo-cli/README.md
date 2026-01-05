@@ -20,51 +20,39 @@ This example demonstrates a full SpecFirst workflow, including requirements, des
    specfirst init --protocol todo-cli-protocol
    ```
 
-## Workflow Walkthrough
+## Quick Start (Run in this repo)
 
-### 1. Requirements
-Generate the requirements prompt:
-```bash
-specfirst reqs | claude -p
-```
-Save the output as `requirements.md`, then complete the stage:
-```bash
-specfirst complete reqs ./requirements.md
-```
+You can run this example immediately using the `--protocol` override:
 
-### 2. Design
-Generate the design prompt (it will include `requirements.md` automatically):
-```bash
-specfirst design | claude -p
-```
-Save the output as `design.md`, then complete the stage:
-```bash
-specfirst complete design ./design.md
-```
+1. **Requirements**:
+   ```bash
+   specfirst --protocol examples/todo-cli/protocol.yaml reqs
+   ```
+   
+2. **Design**:
+   ```bash
+   specfirst --protocol examples/todo-cli/protocol.yaml design
+   ```
 
-### 3. Task Decomposition
-Break the design into specific tasks:
-```bash
-specfirst breakdown | claude -p
-```
-Save the YAML output as `tasks.yaml`, then complete:
-```bash
-specfirst complete breakdown ./tasks.yaml
-```
+## Setup (For a new project)
 
-### 4. Implementation
-List the generated tasks:
-```bash
-specfirst task
-```
-Generate a prompt for the first task:
-```bash
-specfirst task T1 | claude -p
-```
+To use this protocol in your own project:
 
-### 5. Finalize
-Verify your progress at any time with `specfirst status`.
-When finished, validate the whole spec:
-```bash
-specfirst check
-```
+1. Create a new directory and initialize:
+   ```bash
+   mkdir my-todo-app && cd my-todo-app
+   specfirst init
+   ```
+
+2. Copy the protocol and templates:
+   ```bash
+   cp /path/to/specfirst/examples/todo-cli/protocol.yaml .specfirst/protocols/
+   cp -r /path/to/specfirst/examples/todo-cli/templates/* .specfirst/templates/
+   ```
+
+3. Update config (optional) or use the flag:
+   ```bash
+   # Option A: Edit .specfirst/config.yaml to set protocol: todo-cli-protocol
+   # Option B: Use flag
+   specfirst --protocol todo-cli-protocol reqs
+   ```

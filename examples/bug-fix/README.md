@@ -9,24 +9,41 @@ A minimal 2-stage SpecFirst workflow for analyzing and fixing bugs systematicall
 - Using cognitive scaffold commands for risk assessment
 - Minimal overhead for quick fixes
 
-## Setup
-
+## Quick Start (Run in this repo)
+ 
+You can run this example immediately using the `--protocol` override:
+ 
+1. **Analysis**:
+   ```bash
+   specfirst --protocol examples/bug-fix/protocol.yaml analysis
+   ```
+ 
+2. **Fix**:
+   ```bash
+   specfirst --protocol examples/bug-fix/protocol.yaml fix
+   ```
+ 
+## Setup (For a new project)
+ 
+To use this protocol in your own project:
+ 
 1. Create a new directory and initialize:
    ```bash
    mkdir my-bugfix && cd my-bugfix
    specfirst init
    ```
-
-2. Copy the bug-fix protocol and templates:
+ 
+2. Copy the protocol and templates:
    ```bash
    cp /path/to/specfirst/examples/bug-fix/protocol.yaml .specfirst/protocols/
    cp -r /path/to/specfirst/examples/bug-fix/templates/* .specfirst/templates/
    ```
-
-3. Set the protocol in `.specfirst/config.yaml`:
-   ```yaml
-   protocol: bug-fix
-   project_name: my-bugfix
+ 
+3. Update config (optional) or use the flag:
+   ```bash
+   # Option A: Edit .specfirst/config.yaml to set protocol: bug-fix
+   # Option B: Use flag
+   specfirst --protocol bug-fix analysis
    ```
 
 ## Workflow

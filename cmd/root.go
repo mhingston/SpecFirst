@@ -19,6 +19,8 @@ var (
 	stageMaxTasks       int
 	stagePreferParallel bool
 	stageRiskBias       string
+
+	protocolFlag string
 )
 
 var rootCmd = &cobra.Command{
@@ -49,6 +51,7 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.PersistentFlags().StringVar(&protocolFlag, "protocol", "", "override protocol (name or path)")
 	rootCmd.PersistentFlags().StringVar(&stageFormat, "format", "text", "output format: text, json, yaml, or shell")
 	rootCmd.PersistentFlags().StringVar(&stageOut, "out", "", "write compiled prompt to a file")
 	rootCmd.PersistentFlags().IntVar(&stageMaxChars, "max-chars", 0, "truncate output to max chars")

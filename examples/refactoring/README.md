@@ -6,28 +6,42 @@ A comprehensive 5-stage workflow for planning and executing code refactoring saf
 
 - Structured approach to improving existing code
 - Using `trace` and `diff` commands to understand code
-- Risk mitigation through incremental steps
-- Measurable goals and verification
-- Behavior preservation through testing
 
-## Setup
-
+## Quick Start (Run in this repo)
+ 
+You can run this example immediately using the `--protocol` override:
+ 
+1. **Current State**:
+   ```bash
+   specfirst --protocol examples/refactoring/protocol.yaml current-state
+   ```
+ 
+2. **Goals**:
+   ```bash
+   specfirst --protocol examples/refactoring/protocol.yaml goals
+   ```
+ 
+## Setup (For a new project)
+ 
+To use this protocol in your own project:
+ 
 1. Create a new directory and initialize:
    ```bash
    mkdir my-refactoring && cd my-refactoring
    specfirst init
    ```
-
-2. Copy the refactoring protocol and templates:
+ 
+2. Copy the protocol and templates:
    ```bash
    cp /path/to/specfirst/examples/refactoring/protocol.yaml .specfirst/protocols/
    cp -r /path/to/specfirst/examples/refactoring/templates/* .specfirst/templates/
    ```
-
-3. Set the protocol in `.specfirst/config.yaml`:
-   ```yaml
-   protocol: refactoring
-   project_name: my-refactoring
+ 
+3. Update config (optional) or use the flag:
+   ```bash
+   # Option A: Edit .specfirst/config.yaml to set protocol: refactoring
+   # Option B: Use flag
+   specfirst --protocol refactoring current-state
    ```
 
 ## Workflow

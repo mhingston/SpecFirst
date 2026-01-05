@@ -31,6 +31,11 @@ func loadConfig() (config.Config, error) {
 	if cfg.Protocol == "" {
 		cfg.Protocol = assets.DefaultProtocolName
 	}
+	// Override protocol if flag is set
+	if protocolFlag != "" {
+		cfg.Protocol = protocolFlag
+	}
+
 	if cfg.ProjectName == "" {
 		if wd, err := os.Getwd(); err == nil {
 			cfg.ProjectName = filepath.Base(wd)
@@ -48,6 +53,11 @@ func loadConfig() (config.Config, error) {
 }
 
 func loadProtocol(name string) (protocol.Protocol, error) {
+	// If name looks like a path or has .yaml extension, load it directly
+	if filepath.IsAbs(name) || strings.Contains(name, string(os.PathSeparator)) || strings.HasSuffix(name, ".yaml") {
+		return protocol.Load(filepath.Clean(name))
+	}
+	// Otherwise treat as a protocol name in the protocols directory
 	path := store.ProtocolsPath(name + ".yaml")
 	return protocol.Load(path)
 }

@@ -10,24 +10,41 @@ A 4-stage workflow for planning and executing database migrations safely with pr
 - Incremental execution with monitoring
 - Balance between safety and minimal downtime
 
-## Setup
-
+## Quick Start (Run in this repo)
+ 
+You can run this example immediately using the `--protocol` override:
+ 
+1. **Requirements**:
+   ```bash
+   specfirst --protocol examples/database-migration/protocol.yaml requirements
+   ```
+ 
+2. **Migration Plan**:
+   ```bash
+   specfirst --protocol examples/database-migration/protocol.yaml migration-plan
+   ```
+ 
+## Setup (For a new project)
+ 
+To use this protocol in your own project:
+ 
 1. Create a new directory and initialize:
    ```bash
    mkdir my-migration && cd my-migration
    specfirst init
    ```
-
-2. Copy the database-migration protocol and templates:
+ 
+2. Copy the protocol and templates:
    ```bash
    cp /path/to/specfirst/examples/database-migration/protocol.yaml .specfirst/protocols/
    cp -r /path/to/specfirst/examples/database-migration/templates/* .specfirst/templates/
    ```
-
-3. Set the protocol in `.specfirst/config.yaml`:
-   ```yaml
-   protocol: database-migration
-   project_name: my-migration
+ 
+3. Update config (optional) or use the flag:
+   ```bash
+   # Option A: Edit .specfirst/config.yaml to set protocol: database-migration
+   # Option B: Use flag
+   specfirst --protocol database-migration requirements
    ```
 
 ## Workflow

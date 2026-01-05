@@ -305,7 +305,9 @@ These commands generate **prompts only** — no state, no enforcement, no AI cal
 
 ## Stage Execution Options
 
+- `--protocol <path|name>` override active protocol (path to file or name in `.specfirst/protocols`).
 - `--format text|json|yaml|shell` output format (default: `text`).
+
 - `--out <file>` write prompt to a file.
 - `--max-chars <n>` truncate output.
 - `--no-strict` bypass dependency gating.

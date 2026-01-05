@@ -10,24 +10,41 @@ A workflow focused on using SpecFirst's cognitive scaffold commands to improve s
 - Calibrating confidence in specifications
 - Iterative improvement process
 
-## Setup
-
+## Quick Start (Run in this repo)
+ 
+You can run this example immediately using the `--protocol` override:
+ 
+1. **Draft**:
+   ```bash
+   specfirst --protocol examples/spec-review/protocol.yaml draft
+   ```
+ 
+2. **Finalize**:
+   ```bash
+   specfirst --protocol examples/spec-review/protocol.yaml finalize
+   ```
+ 
+## Setup (For a new project)
+ 
+To use this protocol in your own project:
+ 
 1. Create a new directory and initialize:
    ```bash
    mkdir my-spec && cd my-spec
    specfirst init
    ```
-
-2. Copy the spec-review protocol and templates:
+ 
+2. Copy the protocol and templates:
    ```bash
    cp /path/to/specfirst/examples/spec-review/protocol.yaml .specfirst/protocols/
    cp -r /path/to/specfirst/examples/spec-review/templates/* .specfirst/templates/
    ```
-
-3. Set the protocol in `.specfirst/config.yaml`:
-   ```yaml
-   protocol: spec-review
-   project_name: my-spec
+ 
+3. Update config (optional) or use the flag:
+   ```bash
+   # Option A: Edit .specfirst/config.yaml to set protocol: spec-review
+   # Option B: Use flag
+   specfirst --protocol spec-review draft
    ```
 
 ## Workflow

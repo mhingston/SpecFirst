@@ -9,21 +9,42 @@ A complete SpecFirst workflow demonstrating requirements, design with approvals,
 - Task decomposition for parallel development
 - Task-scoped implementation prompts
 
-## Setup
-
+## Quick Start (Run in this repo)
+ 
+You can run this example immediately using the `--protocol` override:
+ 
+1. **Requirements**:
+   ```bash
+   specfirst --protocol examples/api-feature/protocol.yaml requirements
+   ```
+ 
+2. **Design**:
+   ```bash
+   specfirst --protocol examples/api-feature/protocol.yaml design
+   ```
+ 
+## Setup (For a new project)
+ 
+To use this protocol in your own project:
+ 
 1. Create a new directory and initialize:
    ```bash
    mkdir my-api-feature && cd my-api-feature
    specfirst init
    ```
-
-2. Copy the api-feature protocol and templates:
+ 
+2. Copy the protocol and templates:
    ```bash
    cp /path/to/specfirst/examples/api-feature/protocol.yaml .specfirst/protocols/
    cp -r /path/to/specfirst/examples/api-feature/templates/* .specfirst/templates/
    ```
-
-3. Set the protocol in `.specfirst/config.yaml`:
+ 
+3. Update config (optional) or use the flag:
+   ```bash
+   # Option A: Edit .specfirst/config.yaml to set protocol: api-feature
+   # Option B: Use flag
+   specfirst --protocol api-feature requirements
+   ```
    ```yaml
    protocol: api-feature
    project_name: my-api-feature
