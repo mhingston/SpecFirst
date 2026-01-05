@@ -31,11 +31,6 @@ func loadConfig() (config.Config, error) {
 	if cfg.Protocol == "" {
 		cfg.Protocol = assets.DefaultProtocolName
 	}
-	// Override protocol if flag is set
-	if protocolFlag != "" {
-		cfg.Protocol = protocolFlag
-	}
-
 	if cfg.ProjectName == "" {
 		if wd, err := os.Getwd(); err == nil {
 			cfg.ProjectName = filepath.Base(wd)
@@ -50,6 +45,13 @@ func loadConfig() (config.Config, error) {
 		cfg.Constraints = map[string]string{}
 	}
 	return cfg, nil
+}
+
+func activeProtocolName(cfg config.Config) string {
+	if protocolFlag != "" {
+		return protocolFlag
+	}
+	return cfg.Protocol
 }
 
 func loadProtocol(name string) (protocol.Protocol, error) {

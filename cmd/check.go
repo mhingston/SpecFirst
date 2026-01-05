@@ -24,7 +24,7 @@ var checkCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		proto, err := loadProtocol(cfg.Protocol)
+		proto, err := loadProtocol(activeProtocolName(cfg))
 		if err != nil {
 			return err
 		}

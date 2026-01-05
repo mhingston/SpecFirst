@@ -26,7 +26,7 @@ If no task ID is provided, it lists all available tasks.`,
 			return err
 		}
 
-		proto, err := loadProtocol(cfg.Protocol)
+		proto, err := loadProtocol(activeProtocolName(cfg))
 		if err != nil {
 			return err
 		}

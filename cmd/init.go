@@ -53,7 +53,11 @@ var initCmd = &cobra.Command{
 		configPath := store.ConfigPath()
 		if _, err := os.Stat(configPath); os.IsNotExist(err) {
 			projectName := filepath.Base(mustGetwd())
-			cfg := fmt.Sprintf(assets.DefaultConfigTemplate, projectName, assets.DefaultProtocolName)
+			protoName := assets.DefaultProtocolName
+			if protocolFlag != "" {
+				protoName = protocolFlag
+			}
+			cfg := fmt.Sprintf(assets.DefaultConfigTemplate, projectName, protoName)
 			if err := os.WriteFile(configPath, []byte(cfg), 0644); err != nil {
 				return err
 			}

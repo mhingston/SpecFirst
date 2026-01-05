@@ -82,18 +82,24 @@ stages:
 			// Let's call loadConfig/loadProtocol directly to test the helper logic first?
 			// But we updated loadConfig to use global protocolFlag variable.
 
-			// Let's set the flag variable directly for unit testing loadConfig/loadProtocol interactions if Cobra execution is flaky in tests.
+			// Set the flag variable directly for unit testing loadConfig/loadProtocol interactions
 			protocolFlag = customProtoPath
 
 			cfg, err := loadConfig()
 			if err != nil {
 				t.Fatalf("loadConfig failed: %v", err)
 			}
-			if cfg.Protocol != customProtoPath {
-				t.Errorf("expected config protocol to be %q, got %q", customProtoPath, cfg.Protocol)
+			// loadConfig should NOT override the protocol
+			if cfg.Protocol == customProtoPath {
+				t.Errorf("expected config protocol to remain default, but got %q", cfg.Protocol)
+			}
+			// activeProtocolName should return the override
+			active := activeProtocolName(cfg)
+			if active != customProtoPath {
+				t.Errorf("expected active protocol to be %q, got %q", customProtoPath, active)
 			}
 
-			proto, err := loadProtocol(cfg.Protocol)
+			proto, err := loadProtocol(active)
 			if err != nil {
 				t.Fatalf("loadProtocol failed: %v", err)
 			}
@@ -122,7 +128,7 @@ stages:
 		// Since we modified loadConfig globally, any command dealing with state checking will see the mismatch.
 
 		cfg, _ := loadConfig()
-		proto, _ := loadProtocol(cfg.Protocol) // Loads custom-proto
+		proto, _ := loadProtocol(activeProtocolName(cfg)) // Loads custom-proto
 
 		if proto.Name != "custom-proto" {
 			t.Fatal("failed to load custom proto")

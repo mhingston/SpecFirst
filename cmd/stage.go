@@ -7,7 +7,7 @@ func runStage(cmdOut interface{ Write([]byte) (int, error) }, stageID string) er
 	if err != nil {
 		return err
 	}
-	proto, err := loadProtocol(cfg.Protocol)
+	proto, err := loadProtocol(activeProtocolName(cfg))
 	if err != nil {
 		return err
 	}

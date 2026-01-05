@@ -24,7 +24,7 @@ Use --warn-only to report missing stages or approvals without failing the comman
 		if err != nil {
 			return err
 		}
-		proto, err := loadProtocol(cfg.Protocol)
+		proto, err := loadProtocol(activeProtocolName(cfg))
 		if err != nil {
 			return err
 		}

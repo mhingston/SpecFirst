@@ -35,6 +35,12 @@ specfirst complete requirements ./requirements.md
 ```
 This moves the file into the artifact store and updates the project state.
 
+### 5. Overriding Protocols
+You can override the active protocol for any command using the `--protocol` flag. This is useful for testing different workflows or using protocols stored outside `.specfirst/protocols/`:
+```bash
+specfirst --protocol path/to/custom-protocol.yaml status
+```
+
 ## Advanced Workflow
 
 ### Task Decomposition

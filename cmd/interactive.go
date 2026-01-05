@@ -24,7 +24,7 @@ func runInteractive(cmdOut interface{ Write([]byte) (int, error) }) error {
 	if err != nil {
 		return err
 	}
-	proto, err := loadProtocol(cfg.Protocol)
+	proto, err := loadProtocol(activeProtocolName(cfg))
 	if err != nil {
 		return err
 	}
