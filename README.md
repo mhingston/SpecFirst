@@ -298,7 +298,7 @@ These commands generate **prompts only** — no state, no enforcement, no AI cal
 
 ## Stage Execution Options
 
-- `--format text|json|shell` output format (default: `text`).
+- `--format text|json|yaml|shell` output format (default: `text`).
 - `--out <file>` write prompt to a file.
 - `--max-chars <n>` truncate output.
 - `--no-strict` bypass dependency gating.
