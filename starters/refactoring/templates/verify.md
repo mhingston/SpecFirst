@@ -74,3 +74,9 @@ Any problems discovered during verification:
 - Refactoring has been completed
 - Tests have been run
 - (List other assumptions)
+
+## Output Format Constraints
+CRITICAL: You must output ONLY the raw markdown content for the file.
+- Do NOT include any conversational text (e.g. "Here is the file...", "I will now...").
+- Do NOT include markdown code block fences (```markdown ... ```) around the content.
+- Start directly with the markdown content (e.g. # Title).

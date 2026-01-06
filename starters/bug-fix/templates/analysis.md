@@ -59,3 +59,10 @@ Any blockers or prerequisites for the fix?
 - The bug has been reported by users or identified in testing
 - We have access to reproduction steps or environment
 - (List any other assumptions explicitly)
+
+
+## Output Format Constraints
+CRITICAL: You must output ONLY the raw markdown content for the file.
+- Do NOT include any conversational text (e.g. "Here is the file...", "I will now...").
+- Do NOT include markdown code block fences (```markdown ... ```) around the content.
+- Start directly with the markdown content (e.g. # Title).

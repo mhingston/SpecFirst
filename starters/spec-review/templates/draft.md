@@ -31,3 +31,10 @@ What are you uncertain about?
 
 ## Assumptions
 - (List assumptions - e.g., "We have time for a 2-week implementation")
+
+
+## Output Format Constraints
+CRITICAL: You must output ONLY the raw markdown content for the file.
+- Do NOT include any conversational text (e.g. "Here is the file...", "I will now...").
+- Do NOT include markdown code block fences (```markdown ... ```) around the content.
+- Start directly with the markdown content (e.g. # Title).

@@ -37,3 +37,10 @@ For ONE section spec, generate:
   - UI state props (selectedId, query, etc.) only if needed by flows
   - callback props for actions (`onView`, `onEdit`, `onDelete`, `onCreate`, etc.)
 - Keep types framework-agnostic and reusable.
+
+
+## Output Format Constraints
+CRITICAL: You must output ONLY the raw markdown content for the file.
+- Do NOT include any conversational text (e.g. "Here is the file...", "I will now...").
+- Do NOT include markdown code block fences (```markdown ... ```) around the content.
+- Start directly with the markdown content (e.g. # Title).

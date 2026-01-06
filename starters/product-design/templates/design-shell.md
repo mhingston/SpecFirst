@@ -44,3 +44,10 @@ Create:
 - Use tokens from `colors.json` and `typography.json` as the styling source of truth.
 - Shell components should accept props where reasonable (nav items, current section id, user).
 - ShellPreview can be a simple wrapper for local previewing (not export-critical).
+
+
+## Output Format Constraints
+CRITICAL: You must output ONLY the raw markdown content for the file.
+- Do NOT include any conversational text (e.g. "Here is the file...", "I will now...").
+- Do NOT include markdown code block fences (```markdown ... ```) around the content.
+- Start directly with the markdown content (e.g. # Title).

@@ -94,3 +94,10 @@ Copy the latest versions of:
 
 ## Output Requirements
 Write all files under `product-plan/` (at least one level deep so it matches `product-plan/*`).
+
+
+## Output Format Constraints
+CRITICAL: You must output ONLY the raw markdown content for the file.
+- Do NOT include any conversational text (e.g. "Here is the file...", "I will now...").
+- Do NOT include markdown code block fences (```markdown ... ```) around the content.
+- Start directly with the markdown content (e.g. # Title).

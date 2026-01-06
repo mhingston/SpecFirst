@@ -22,3 +22,10 @@ Create `product/product-overview.md` with:
 ## Notes
 - Keep it crisp and implementation-agnostic.
 - No backend/db decisions here; focus on product behavior and UX.
+
+
+## Output Format Constraints
+CRITICAL: You must output ONLY the raw markdown content for the file.
+- Do NOT include any conversational text (e.g. "Here is the file...", "I will now...").
+- Do NOT include markdown code block fences (```markdown ... ```) around the content.
+- Start directly with the markdown content (e.g. # Title).
