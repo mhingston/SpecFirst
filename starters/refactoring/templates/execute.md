@@ -26,6 +26,7 @@ For each change, explain:
 - What to verify
 
 ## Implementation Guidelines
+- **Output Formatting**: For this refactoring execution, **provide the raw content/diff only**. Skip preamble, conversation, and Markdown code fences.
 - Follow the step order in the plan
 - Commit after each checkpoint
 - Run tests after each step

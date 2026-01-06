@@ -12,6 +12,7 @@
 Implement the code for this specific task from the task breakdown.
 
 ## Guidelines
+- **Output Formatting**: For this implementation task, **provide the raw content/diff only**. Skip all preamble, conversational filler, and Markdown code blocks (unless the output *is* a Markdown file). Only provide reasoning if specifically asked or if there is a critical ambiguity.
 - Follow the API design specs exactly
 - Implement only what's in this task's scope
 - Add tests for your changes

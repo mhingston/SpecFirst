@@ -32,6 +32,9 @@ Implement the **section screen** as production-grade React components.
 If the section spec implies multiple views (list + detail + form):
 - Build the primary view first unless `CustomVars.view_name` specifies otherwise.
 - Prefer list/dashboard as primary if ambiguous.
+ 
+## Guidelines
+- **Output Formatting**: For this task, **provide the raw code only**. Skip all preamble, conversational filler, and Markdown code fences.
 
 ## Output Requirements
 Create files matching:

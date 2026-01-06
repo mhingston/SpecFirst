@@ -10,5 +10,6 @@
 {{- end }}
 
 ## Instructions
+- **Output Formatting**: For this task, **provide the raw code only**. Skip all preamble, conversation, and Markdown code fences.
 - Implement ONLY what is required for the specific task.
 - Follow the project language and framework standards.

@@ -85,6 +85,7 @@ For each issue:
 - [ ] Post-mortem (if issues)
 
 ## Guidelines
+- **Output Formatting**: For this migration execution, **provide the raw log only**. Skip preamble, conversation, and Markdown code fences (the output *is* a Markdown file).
 - Log everything in real-time
 - Don't skip verification steps
 - If unsure, pause and consult DBA

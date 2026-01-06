@@ -19,6 +19,12 @@ Analyze the reported bug and create a structured analysis that identifies:
 3. **Reproduction steps** - How to trigger the bug reliably
 4. **Proposed fix** - High-level approach to fixing it
 5. **Risks** - What could break if we fix this?
+ 
+## Guidelines
+- **Output Formatting**: For this analysis, **provide the raw content only**. Skip all preamble, conversational filler, and Markdown code fences (the output *is* a Markdown file).
+- Be thorough but concise
+- Use technical language appropriate for a root cause analysis
+- Surface hidden risks even if they seem unlikely
 
 ## Output Requirements
 Create `analysis.md` with the following structure:

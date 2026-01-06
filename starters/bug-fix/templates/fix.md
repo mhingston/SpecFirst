@@ -17,6 +17,7 @@ Generate the minimal code changes required to:
 3. Handle edge cases identified in the analysis
 
 ## Implementation Guidelines
+- **Output Formatting**: For this fix, **provide the raw content/diff only**. Skip preamble, conversation, and Markdown code fences.
 - **Minimize scope**: Only change what's necessary
 - **Add tests**: Cover the bug scenario and edge cases
 - **Preserve behavior**: Don't introduce new features

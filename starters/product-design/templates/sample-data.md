@@ -14,6 +14,9 @@ For ONE section spec, generate:
   - entity interfaces
   - props interface for the main component
   - callback signatures for actions in the spec
+ 
+## Guidelines
+- **Output Formatting**: For this task, **provide the raw content only**. Skip all preamble, conversational filler, and Markdown code fences.
 
 ### Section selection
 - Prefer `CustomVars.section_id` if present: {{ index .CustomVars "section_id" }}
