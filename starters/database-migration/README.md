@@ -16,35 +16,34 @@ You can run this example immediately using the `--protocol` override:
  
 1. **Requirements**:
    ```bash
-   specfirst --protocol starters/database-migration/protocol.yaml requirements
+   specfirst --protocol starters/database-migration/protocol.yaml requirements | gemini -i
    ```
  
 2. **Migration Plan**:
    ```bash
-   specfirst --protocol starters/database-migration/protocol.yaml migration-plan
+   specfirst --protocol starters/database-migration/protocol.yaml migration-plan | gemini -i
    ```
  
 ## Setup (For a new project)
  
 To use this protocol in your own project:
  
-1. Create a new directory and initialize:
+1. Create a new directory and initialize it with Git:
    ```bash
    mkdir my-migration && cd my-migration
-   specfirst init
+   git init
    ```
- 
-2. Copy the protocol and templates:
+
+2. Initialize SpecFirst with the `database-migration` starter:
    ```bash
-   cp /path/to/specfirst/starters/database-migration/protocol.yaml .specfirst/protocols/
-   cp -r /path/to/specfirst/starters/database-migration/templates/* .specfirst/templates/
+   specfirst init --starter database-migration
    ```
  
 3. Update config (optional) or use the flag:
    ```bash
    # Option A: Edit .specfirst/config.yaml to set protocol: database-migration
    # Option B: Use flag
-   specfirst --protocol database-migration requirements
+   specfirst requirements | gemini -i
    ```
 
 ## Workflow
@@ -53,7 +52,7 @@ To use this protocol in your own project:
 
 Define what needs to change:
 ```bash
-specfirst requirements | claude -p > requirements.md
+specfirst requirements | gemini -i > requirements.md
 specfirst complete requirements ./requirements.md
 ```
 
@@ -61,7 +60,7 @@ specfirst complete requirements ./requirements.md
 
 Generate detailed migration SQL and steps:
 ```bash
-specfirst migration-plan | claude -p > migration-plan.md
+specfirst migration-plan | gemini -i > migration-plan.md
 specfirst complete migration-plan ./migration-plan.md
 ```
 
@@ -76,7 +75,7 @@ specfirst approve migration-plan --role dba --by "Jane DBA"
 
 Surface risks before creating rollback plan:
 ```bash
-specfirst failure-modes ./migration-plan.md | claude -p
+specfirst failure-modes ./migration-plan.md | gemini -i
 ```
 
 Review output and incorporate into rollback strategy.
@@ -85,7 +84,7 @@ Review output and incorporate into rollback strategy.
 
 Plan for what to do if migration fails:
 ```bash
-specfirst rollback-plan | claude -p > rollback-plan.md
+specfirst rollback-plan | gemini -i > rollback-plan.md
 specfirst complete rollback-plan ./rollback-plan.md
 ```
 
@@ -100,7 +99,7 @@ specfirst approve rollback-plan --role ops --by "Bob Ops"
 
 Run the migration with monitoring:
 ```bash
-specfirst execute | claude -p
+specfirst execute | gemini -i
 # Follow the plan step by step, documenting as you go
 specfirst complete execute ./migration-log.md ./scripts/*.sql
 ```

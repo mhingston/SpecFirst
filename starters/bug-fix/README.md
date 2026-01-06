@@ -15,35 +15,27 @@ You can run this example immediately using the `--protocol` override:
  
 1. **Analysis**:
    ```bash
-   specfirst --protocol starters/bug-fix/protocol.yaml analysis
+   specfirst --protocol starters/bug-fix/protocol.yaml analysis | gemini -i
    ```
  
 2. **Fix**:
    ```bash
-   specfirst --protocol starters/bug-fix/protocol.yaml fix
+   specfirst --protocol starters/bug-fix/protocol.yaml fix | gemini -i
    ```
  
 ## Setup (For a new project)
  
 To use this protocol in your own project:
  
-1. Create a new directory and initialize:
+1. Create a new directory and initialize it with Git:
    ```bash
    mkdir my-bugfix && cd my-bugfix
-   specfirst init
+   git init
    ```
- 
-2. Copy the protocol and templates:
+
+2. Initialize SpecFirst with the `bug-fix` starter:
    ```bash
-   cp /path/to/specfirst/starters/bug-fix/protocol.yaml .specfirst/protocols/
-   cp -r /path/to/specfirst/starters/bug-fix/templates/* .specfirst/templates/
-   ```
- 
-3. Update config (optional) or use the flag:
-   ```bash
-   # Option A: Edit .specfirst/config.yaml to set protocol: bug-fix
-   # Option B: Use flag
-   specfirst --protocol bug-fix analysis
+   specfirst init --starter bug-fix
    ```
 
 ## Workflow
@@ -52,7 +44,7 @@ To use this protocol in your own project:
 
 Generate the analysis prompt:
 ```bash
-specfirst analysis | claude -p > analysis.md
+specfirst analysis | gemini -i > analysis.md
 ```
 
 This will prompt you to document:
@@ -71,7 +63,7 @@ specfirst complete analysis ./analysis.md
 
 Before implementing, surface potential issues:
 ```bash
-specfirst failure-modes ./analysis.md | claude -p
+specfirst failure-modes ./analysis.md | gemini -i
 ```
 
 Review the output and update your analysis if needed.
@@ -80,7 +72,7 @@ Review the output and update your analysis if needed.
 
 Generate the implementation prompt (includes analysis automatically):
 ```bash
-specfirst fix | claude -p
+specfirst fix | gemini -i
 ```
 
 Save the generated code changes, then complete:

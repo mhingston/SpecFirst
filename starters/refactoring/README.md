@@ -13,35 +13,34 @@ You can run this example immediately using the `--protocol` override:
  
 1. **Current State**:
    ```bash
-   specfirst --protocol starters/refactoring/protocol.yaml current-state
+   specfirst --protocol starters/refactoring/protocol.yaml current-state | gemini -i
    ```
  
 2. **Goals**:
    ```bash
-   specfirst --protocol starters/refactoring/protocol.yaml goals
+   specfirst --protocol starters/refactoring/protocol.yaml goals | gemini -i
    ```
  
 ## Setup (For a new project)
  
 To use this protocol in your own project:
  
-1. Create a new directory and initialize:
+1. Create a new directory and initialize it with Git:
    ```bash
    mkdir my-refactoring && cd my-refactoring
-   specfirst init
+   git init
    ```
- 
-2. Copy the protocol and templates:
+
+2. Initialize SpecFirst with the `refactoring` starter:
    ```bash
-   cp /path/to/specfirst/starters/refactoring/protocol.yaml .specfirst/protocols/
-   cp -r /path/to/specfirst/starters/refactoring/templates/* .specfirst/templates/
+   specfirst init --starter refactoring
    ```
  
 3. Update config (optional) or use the flag:
    ```bash
    # Option A: Edit .specfirst/config.yaml to set protocol: refactoring
    # Option B: Use flag
-   specfirst --protocol refactoring current-state
+   specfirst current-state | gemini -i
    ```
 
 ## Workflow
@@ -51,10 +50,10 @@ To use this protocol in your own project:
 Map existing code to understand what you're refactoring:
 ```bash
 # Map code to specifications
-specfirst trace ./path/to/current-code.go | claude -p
+specfirst trace ./path/to/current-code.go | gemini -i
 
 # Generate current state analysis
-specfirst current-state | claude -p > current-state.md
+specfirst current-state | gemini -i > current-state.md
 specfirst complete current-state ./current-state.md
 ```
 
@@ -62,7 +61,7 @@ specfirst complete current-state ./current-state.md
 
 Set clear, measurable refactoring objectives:
 ```bash
-specfirst goals | claude -p > goals.md
+specfirst goals | gemini -i > goals.md
 specfirst complete goals ./goals.md
 ```
 
@@ -70,14 +69,14 @@ specfirst complete goals ./goals.md
 
 Before planning, surface potential problems:
 ```bash
-specfirst failure-modes ./goals.md | claude -p
+specfirst failure-modes ./goals.md | gemini -i
 ```
 
 ### 4. Create Refactoring Plan
 
 Generate detailed step-by-step plan:
 ```bash
-specfirst plan | claude -p > plan.md
+specfirst plan | gemini -i > plan.md
 specfirst complete plan ./plan.md
 ```
 
@@ -85,7 +84,7 @@ specfirst complete plan ./plan.md
 
 Follow the plan step by step:
 ```bash
-specfirst execute | claude -p
+specfirst execute | gemini -i
 # Implement changes following the plan
 specfirst complete execute ./path/to/refactored-code.go ./tests/
 ```
@@ -94,7 +93,7 @@ specfirst complete execute ./path/to/refactored-code.go ./tests/
 
 Confirm goals met and behavior preserved:
 ```bash
-specfirst verify | claude -p > verification-report.md
+specfirst verify | gemini -i > verification-report.md
 specfirst complete verify ./verification-report.md
 ```
 
@@ -102,7 +101,7 @@ specfirst complete verify ./verification-report.md
 
 Analyze the changes made:
 ```bash
-specfirst diff ./current-state.md ./verification-report.md | claude -p
+specfirst diff ./current-state.md ./verification-report.md | gemini -i
 ```
 
 ## Timeline

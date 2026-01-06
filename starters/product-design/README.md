@@ -21,23 +21,20 @@ A workflow for product design, from vision through to implementation handoff.
 
 To use this protocol in a new project:
 
-1. Create a new directory and initialize:
+1. Create a new directory and initialize it with Git:
    ```bash
    mkdir my-product && cd my-product
-   specfirst init
+   git init
    ```
 
-2. Copy the protocol, templates, and skills:
+2. Initialize SpecFirst with the `product-design` starter:
    ```bash
-   cp /path/to/specfirst/starters/product-design/protocol.yaml .specfirst/protocols/
-   cp -r /path/to/specfirst/starters/product-design/templates/* .specfirst/templates/
-   cp -r /path/to/specfirst/starters/product-design/skills/* .specfirst/skills/
+   specfirst init --starter product-design
    ```
 
-3. Set the protocol in your config or use the flag:
+3. Run the workflow stages:
    ```bash
-   specfirst --protocol product-design status
-   specfirst --protocol product-design product-vision
+   specfirst product-vision | gemini -i > product/product-overview.md
    ```
 
 ## Section Looping
@@ -53,13 +50,13 @@ This protocol supports iteration via `repeatable: true` stages. To design multip
 
 2. Run the section stages:
    ```bash
-   specfirst shape-section
+   specfirst shape-section | gemini -i
    # Complete with: specfirst complete shape-section product/sections/invoices/spec.md
    
-   specfirst sample-data
+   specfirst sample-data | gemini -i
    # Complete with: specfirst complete sample-data product/sections/invoices/data.json product/sections/invoices/types.ts
    
-   specfirst design-screen
+   specfirst design-screen | gemini -i
    # Complete with: specfirst complete design-screen src/sections/invoices/InvoiceList.tsx ...
    ```
 

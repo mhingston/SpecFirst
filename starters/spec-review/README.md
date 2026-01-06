@@ -16,35 +16,34 @@ You can run this example immediately using the `--protocol` override:
  
 1. **Draft**:
    ```bash
-   specfirst --protocol starters/spec-review/protocol.yaml draft
+   specfirst --protocol starters/spec-review/protocol.yaml draft | gemini -i
    ```
  
 2. **Finalize**:
    ```bash
-   specfirst --protocol starters/spec-review/protocol.yaml finalize
+   specfirst --protocol starters/spec-review/protocol.yaml finalize | gemini -i
    ```
  
 ## Setup (For a new project)
  
 To use this protocol in your own project:
  
-1. Create a new directory and initialize:
+1. Create a new directory and initialize it with Git:
    ```bash
    mkdir my-spec && cd my-spec
-   specfirst init
+   git init
    ```
- 
-2. Copy the protocol and templates:
+
+2. Initialize SpecFirst with the `spec-review` starter:
    ```bash
-   cp /path/to/specfirst/starters/spec-review/protocol.yaml .specfirst/protocols/
-   cp -r /path/to/specfirst/starters/spec-review/templates/* .specfirst/templates/
+   specfirst init --starter spec-review
    ```
  
 3. Update config (optional) or use the flag:
    ```bash
    # Option A: Edit .specfirst/config.yaml to set protocol: spec-review
    # Option B: Use flag
-   specfirst --protocol spec-review draft
+   specfirst draft | gemini -i
    ```
 
 ## Workflow
@@ -53,7 +52,7 @@ To use this protocol in your own project:
 
 Generate the draft prompt:
 ```bash
-specfirst draft | claude -p > spec-draft.md
+specfirst draft | gemini -i > spec-draft.md
 ```
 
 Complete the stage:
@@ -65,7 +64,7 @@ specfirst complete draft ./spec-draft.md
 
 Identify what you're assuming but haven't stated:
 ```bash
-specfirst assumptions ./spec-draft.md | claude -p > assumptions-found.md
+specfirst assumptions ./spec-draft.md | gemini -i > assumptions-found.md
 ```
 
 Review the output and update your draft with explicit assumptions.
@@ -76,17 +75,17 @@ Get different perspectives on your spec:
 
 **Security review:**
 ```bash
-specfirst review ./spec-draft.md --persona security | claude -p > security-review.md
+specfirst review ./spec-draft.md --persona security | gemini -i > security-review.md
 ```
 
 **Performance review:**
 ```bash
-specfirst review ./spec-draft.md --persona performance | claude -p > performance-review.md
+specfirst review ./spec-draft.md --persona performance | gemini -i > performance-review.md
 ```
 
 **Maintainability review:**
 ```bash
-specfirst review ./spec-draft.md --persona maintainer | claude -p > maintainer-review.md
+specfirst review ./spec-draft.md --persona maintainer | gemini -i > maintainer-review.md
 ```
 
 Address concerns in your draft.
@@ -95,7 +94,7 @@ Address concerns in your draft.
 
 Identify what could go wrong:
 ```bash
-specfirst failure-modes ./spec-draft.md | claude -p > failure-analysis.md
+specfirst failure-modes ./spec-draft.md | gemini -i > failure-analysis.md
 ```
 
 Add risk mitigation to your spec based on findings.
@@ -104,7 +103,7 @@ Add risk mitigation to your spec based on findings.
 
 Identify areas where you're uncertain:
 ```bash
-specfirst calibrate ./spec-draft.md --mode confidence | claude -p > confidence-report.md
+specfirst calibrate ./spec-draft.md --mode confidence | gemini -i > confidence-report.md
 ```
 
 Strengthen low-confidence areas or mark them as open questions.
@@ -113,7 +112,7 @@ Strengthen low-confidence areas or mark them as open questions.
 
 Surface vague language:
 ```bash
-specfirst calibrate ./spec-draft.md --mode uncertainty | claude -p > ambiguity-check.md
+specfirst calibrate ./spec-draft.md --mode uncertainty | gemini -i > ambiguity-check.md
 ```
 
 Clarify any ambiguous statements.
@@ -122,7 +121,7 @@ Clarify any ambiguous statements.
 
 Incorporate all feedback and create final spec:
 ```bash
-specfirst finalize | claude -p > spec-final.md
+specfirst finalize | gemini -i > spec-final.md
 specfirst complete finalize ./spec-final.md
 ```
 

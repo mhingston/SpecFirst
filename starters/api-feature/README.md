@@ -15,38 +15,31 @@ You can run this example immediately using the `--protocol` override:
  
 1. **Requirements**:
    ```bash
-   specfirst --protocol starters/api-feature/protocol.yaml requirements
+   specfirst --protocol starters/api-feature/protocol.yaml requirements | gemini -i
    ```
  
 2. **Design**:
    ```bash
-   specfirst --protocol starters/api-feature/protocol.yaml design
+   specfirst --protocol starters/api-feature/protocol.yaml design | gemini -i
    ```
  
 ## Setup (For a new project)
  
 To use this protocol in your own project:
  
-1. Create a new directory and initialize:
+1. Create a new directory and initialize it with Git:
    ```bash
    mkdir my-api-feature && cd my-api-feature
-   specfirst init
+   git init
    ```
- 
-2. Copy the protocol and templates:
+
+2. Initialize SpecFirst with the `api-feature` starter:
    ```bash
-   cp /path/to/specfirst/starters/api-feature/protocol.yaml .specfirst/protocols/
-   cp -r /path/to/specfirst/starters/api-feature/templates/* .specfirst/templates/
+   specfirst init --starter api-feature
    ```
- 
-3. Update config (optional) or use the flag:
-   ```bash
-   # Option A: Edit .specfirst/config.yaml to set protocol: api-feature
-   # Option B: Use flag
-   specfirst --protocol api-feature requirements
-   ```
+
+3. Update project metadata in `.specfirst/config.yaml` (optional):
    ```yaml
-   protocol: api-feature
    project_name: my-api-feature
    language: Go  # or your language
    framework: gin  # or your framework
@@ -58,7 +51,7 @@ To use this protocol in your own project:
 
 Generate the requirements prompt:
 ```bash
-specfirst requirements | claude -p > requirements.md
+specfirst requirements | gemini -i > requirements.md
 ```
 
 Complete the stage:
@@ -70,7 +63,7 @@ specfirst complete requirements ./requirements.md
 
 Generate the design prompt (automatically includes requirements):
 ```bash
-specfirst design | claude -p > design.md
+specfirst design | gemini -i > design.md
 ```
 
 Complete the stage:
@@ -101,20 +94,20 @@ Before decomposing, you can use cognitive commands:
 
 ```bash
 # Security review
-specfirst review ./design.md --persona security | claude -p
+specfirst review ./design.md --persona security | gemini -i
 
 # Performance review
-specfirst review ./design.md --persona performance | claude -p
+specfirst review ./design.md --persona performance | gemini -i
 
 # Surface assumptions
-specfirst assumptions ./design.md | claude -p
+specfirst assumptions ./design.md | gemini -i
 ```
 
 ### 5. Break Down into Tasks
 
 Generate the decomposition prompt:
 ```bash
-specfirst decompose | claude -p > tasks.yaml
+specfirst decompose | gemini -i > tasks.yaml
 ```
 
 Complete:
@@ -131,7 +124,7 @@ specfirst task
 
 Generate prompt for a specific task:
 ```bash
-specfirst task T1 | claude -p
+specfirst task T1 | gemini -i
 ```
 
 After implementing, complete it:
