@@ -91,6 +91,19 @@ var checkCmd = &cobra.Command{
 				expected := store.ArtifactsPath(stage.ID, output)
 				if _, err := os.Stat(expected); os.IsNotExist(err) {
 					addWarning("Outputs", fmt.Sprintf("Missing output for stage %s: %s", stage.ID, expected))
+				} else if stage.Output != nil && len(stage.Output.Sections) > 0 {
+					// Check for required sections
+					content, err := os.ReadFile(expected)
+					if err == nil {
+						sContent := string(content)
+						for _, sectionHeader := range stage.Output.Sections {
+							// Check for markdown header
+							// We check for "# Header" or "## Header"
+							if !strings.Contains(sContent, "# "+sectionHeader) && !strings.Contains(sContent, "## "+sectionHeader) {
+								addWarning("Structure", fmt.Sprintf("Missing section %q in %s", sectionHeader, expected))
+							}
+						}
+					}
 				}
 			}
 		}

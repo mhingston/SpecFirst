@@ -83,4 +83,11 @@ func init() {
 	rootCmd.AddCommand(traceCmd)
 	rootCmd.AddCommand(distillCmd)
 	rootCmd.AddCommand(calibrateCmd)
+
+	// Epistemic Ledger commands
+	rootCmd.AddCommand(assumeCmd)
+	rootCmd.AddCommand(questionCmd)
+	rootCmd.AddCommand(decisionCmd)
+	rootCmd.AddCommand(riskCmd)
+	rootCmd.AddCommand(disputeCmd)
 }

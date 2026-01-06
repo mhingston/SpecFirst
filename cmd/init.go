@@ -12,6 +12,7 @@ import (
 
 	"specfirst/internal/assets"
 	"specfirst/internal/starter"
+	"specfirst/internal/state"
 	"specfirst/internal/store"
 )
 
@@ -63,19 +64,31 @@ Options:
 			selectedStarter = chosen
 		}
 
-		// If a starter is selected, apply it after base setup
+		// Determine protocol name
+		protocolName := assets.DefaultProtocolName
 		if selectedStarter != "" {
-			// 1. Create basic config first if missing (so Apply can merge defaults into it)
-			configPath := store.ConfigPath()
-			if _, err := os.Stat(configPath); os.IsNotExist(err) {
-				projectName := filepath.Base(mustGetwd())
-				cfg := fmt.Sprintf(assets.DefaultConfigTemplate, projectName, "temp") // temporary protocol name, will be updated by Apply
-				if err := os.WriteFile(configPath, []byte(cfg), 0644); err != nil {
-					return err
-				}
-			}
+			protocolName = selectedStarter
+		} else if protocolFlag != "" {
+			protocolName = protocolFlag
+		}
 
-			// 2. Apply the starter (copies protocol, templates, skills AND updates config with defaults)
+		// Write config first
+		configPath := store.ConfigPath()
+		if _, err := os.Stat(configPath); os.IsNotExist(err) {
+			projectName := filepath.Base(mustGetwd())
+			cfg := fmt.Sprintf(assets.DefaultConfigTemplate, projectName, protocolName)
+			if err := os.WriteFile(configPath, []byte(cfg), 0644); err != nil {
+				return err
+			}
+		}
+
+		// Apply starter if selected
+		if selectedStarter != "" {
+			// Apply the starter (copies protocol, templates, skills)
+			// We pass updateConfig=false because we already wrote the correct config above
+			// BUT starter.Apply might have extra logic for defaults.
+			// Actually, starter.Apply expects to be able to update config.
+			// Let's let it update if it needs to, but we started with a valid one.
 			if err := starter.Apply(selectedStarter, initForce, true); err != nil {
 				return fmt.Errorf("applying starter %q: %w", selectedStarter, err)
 			}
@@ -96,25 +109,16 @@ Options:
 			if err := writeIfMissing(store.TemplatesPath("decompose.md"), assets.DecomposeTemplate); err != nil {
 				return err
 			}
-
-			configPath := store.ConfigPath()
-			if _, err := os.Stat(configPath); os.IsNotExist(err) {
-				projectName := filepath.Base(mustGetwd())
-				protoName := assets.DefaultProtocolName
-				if protocolFlag != "" {
-					protoName = protocolFlag
-				}
-				cfg := fmt.Sprintf(assets.DefaultConfigTemplate, projectName, protoName)
-				if err := os.WriteFile(configPath, []byte(cfg), 0644); err != nil {
-					return err
-				}
-			}
 		}
 
-		// Write state file if missing
+		// Write state file using NewState
 		statePath := store.StatePath()
 		if _, err := os.Stat(statePath); os.IsNotExist(err) {
-			if err := os.WriteFile(statePath, []byte("{}\n"), 0644); err != nil {
+			// Initialize with the determined protocol
+			// Check if we can load it to get the real name from config if starter changed it?
+			// But for now, using the name we derived is safer than empty string.
+			s := state.NewState(protocolName)
+			if err := state.Save(statePath, s); err != nil {
 				return err
 			}
 		}

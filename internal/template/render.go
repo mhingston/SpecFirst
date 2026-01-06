@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"specfirst/internal/protocol"
+	"specfirst/internal/state"
 )
 
 type Input struct {
@@ -32,6 +33,8 @@ type Data struct {
 	StageType      string
 	Prompt         *protocol.PromptConfig
 	OutputContract *protocol.OutputContract
+
+	Epistemics *state.Epistemics // pointer to avoid copying or allow nil
 }
 
 type cachedTemplate struct {
