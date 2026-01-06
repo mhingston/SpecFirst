@@ -3,12 +3,9 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"time"
+	"specfirst/internal/engine"
 
 	"github.com/spf13/cobra"
-
-	"specfirst/internal/protocol"
-	"specfirst/internal/state"
 )
 
 var approveCmd = &cobra.Command{
@@ -31,65 +28,22 @@ var approveCmd = &cobra.Command{
 			approvedBy = os.Getenv("USERNAME")
 		}
 
-		cfg, err := loadConfig()
+		eng, err := engine.Load(protocolFlag)
 		if err != nil {
 			return err
 		}
-		proto, err := loadProtocol(activeProtocolName(cfg))
+
+		warnings, err := eng.ApproveStage(stageID, role, approvedBy, notes)
 		if err != nil {
 			return err
 		}
-		if !approvalDeclared(proto.Approvals, stageID, role) {
-			return fmt.Errorf("approval not declared in protocol: stage=%s role=%s", stageID, role)
-		}
-
-		s, err := loadState()
-		if err != nil {
-			return err
-		}
-		s = ensureStateInitialized(s, proto)
-
-		// Warn if stage is not yet completed
-		if !s.IsStageCompleted(stageID) {
-			fmt.Fprintf(cmd.ErrOrStderr(), "Warning: stage %s is not yet completed; approval recorded preemptively\n", stageID)
-		}
-
-		// Check for existing approval with same role and update instead of duplicating
-		newApproval := state.Approval{
-			Role:       role,
-			ApprovedBy: approvedBy,
-			ApprovedAt: time.Now().UTC(),
-			Notes:      notes,
-		}
-		updated := false
-		for i, existing := range s.Approvals[stageID] {
-			if existing.Role == role {
-				s.Approvals[stageID][i] = newApproval
-				updated = true
-				fmt.Fprintf(cmd.ErrOrStderr(), "Note: updating existing approval for role %s\n", role)
-				break
-			}
-		}
-		if !updated {
-			s.Approvals[stageID] = append(s.Approvals[stageID], newApproval)
-		}
-
-		if err := saveState(s); err != nil {
-			return err
+		for _, w := range warnings {
+			fmt.Fprintf(cmd.ErrOrStderr(), "Warning: %s\n", w)
 		}
 
 		fmt.Fprintf(cmd.OutOrStdout(), "Recorded approval for %s (role: %s)\n", stageID, role)
 		return nil
 	},
-}
-
-func approvalDeclared(approvals []protocol.Approval, stageID string, role string) bool {
-	for _, approval := range approvals {
-		if approval.Stage == stageID && approval.Role == role {
-			return true
-		}
-	}
-	return false
 }
 
 func init() {
