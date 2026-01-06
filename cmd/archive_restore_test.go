@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"specfirst/internal/assets"
+	"specfirst/internal/snapshot"
 	"specfirst/internal/store"
 
 	"github.com/spf13/cobra"
@@ -35,13 +36,16 @@ func TestArchiveRestoreCleansWorkspace(t *testing.T) {
 	cleanStateJSON := `{"completed_stages": []}`
 	os.WriteFile(store.StatePath(), []byte(cleanStateJSON), 0644)
 
+	// Create snapshot manager
+	mgr := snapshot.NewManager(store.ArchivesPath())
+
 	// Create Archive "clean-v1" (Snapshot of this state, but WITHOUT the dirty artifact in state, so createArchive won't include it?)
 	// update: createArchive only includes artifacts referenced in state.json.
 	// The `dirty.md` is NOT in state.json, so it won't be in the archive.
 	// But it IS on disk.
 	// So `createArchive` will make an archive that *doesn't* have `dirty.md`.
 
-	err := createArchive("clean-v1", nil, "")
+	err := mgr.Create("clean-v1", nil, "")
 	if err != nil {
 		t.Fatalf("createArchive failed: %v", err)
 	}
@@ -77,7 +81,7 @@ func TestArchiveRestoreCleansWorkspace(t *testing.T) {
 	os.MkdirAll(store.ArtifactsPath(), 0755)
 
 	// Create clean archive
-	err = createArchive("clean-v2", nil, "")
+	err = mgr.Create("clean-v2", nil, "")
 	if err != nil {
 		t.Fatalf("createArchive v2 failed: %v", err)
 	}

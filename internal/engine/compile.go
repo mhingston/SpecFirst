@@ -91,6 +91,7 @@ func (e *Engine) CompilePrompt(stage protocol.Stage, stageIDs []string, opts Com
 		StageType:      stage.Type,
 		Prompt:         stage.Prompt,
 		OutputContract: stage.Output,
+		Epistemics:     e.State.Epistemics,
 	}
 
 	templatePath := store.TemplatesPath(stage.Template)

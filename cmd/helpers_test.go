@@ -85,6 +85,10 @@ func TestValidateOutputs(t *testing.T) {
 	if err := os.Chdir(tmp); err != nil {
 		t.Fatal(err)
 	}
+	// Initialize workspace root
+	if err := os.Mkdir(filepath.Join(tmp, ".specfirst"), 0755); err != nil {
+		t.Fatal(err)
+	}
 
 	stage := protocol.Stage{
 		Outputs: []string{"src/*", "requirements.md"},
@@ -113,7 +117,7 @@ func TestMissingApprovals(t *testing.T) {
 	}
 	s := state.State{
 		CompletedStages: []string{"design"},
-		Approvals:       map[string][]state.Approval{},
+		Attestations:    map[string][]state.Attestation{},
 	}
 
 	missing := missingApprovals(p, s)
@@ -121,7 +125,7 @@ func TestMissingApprovals(t *testing.T) {
 		t.Fatalf("expected missing approval, got %v", missing)
 	}
 
-	s.Approvals["design"] = []state.Approval{{Role: "reviewer"}}
+	s.Attestations["design"] = []state.Attestation{{Role: "reviewer", Status: "approved"}}
 	missing = missingApprovals(p, s)
 	if len(missing) != 0 {
 		t.Fatalf("expected no missing approvals, got %v", missing)

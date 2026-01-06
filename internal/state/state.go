@@ -9,14 +9,14 @@ import (
 )
 
 type State struct {
-	Protocol        string                 `json:"protocol"`
-	CurrentStage    string                 `json:"current_stage"`
-	CompletedStages []string               `json:"completed_stages"`
-	StartedAt       time.Time              `json:"started_at"`
-	SpecVersion     string                 `json:"spec_version"`
-	StageOutputs    map[string]StageOutput `json:"stage_outputs"`
-	Approvals       map[string][]Approval  `json:"approvals"`
-	Epistemics      Epistemics             `json:"epistemics,omitempty"`
+	Protocol        string                   `json:"protocol"`
+	CurrentStage    string                   `json:"current_stage"`
+	CompletedStages []string                 `json:"completed_stages"`
+	StartedAt       time.Time                `json:"started_at"`
+	SpecVersion     string                   `json:"spec_version"`
+	StageOutputs    map[string]StageOutput   `json:"stage_outputs"`
+	Attestations    map[string][]Attestation `json:"attestations"`
+	Epistemics      Epistemics               `json:"epistemics,omitempty"`
 }
 
 type Epistemics struct {
@@ -85,11 +85,14 @@ type StageOutput struct {
 	PromptHash  string    `json:"prompt_hash"`
 }
 
-type Approval struct {
+type Attestation struct {
 	Role       string    `json:"role"`
-	ApprovedBy string    `json:"approved_by"`
-	ApprovedAt time.Time `json:"approved_at"`
-	Notes      string    `json:"notes,omitempty"`
+	AttestedBy string    `json:"attested_by"`
+	Scope      []string  `json:"scope"`
+	Status     string    `json:"status"` // approved, approved_with_conditions, needs_changes, rejected
+	Conditions []string  `json:"conditions,omitempty"`
+	Rationale  string    `json:"rationale"`
+	Date       time.Time `json:"date"`
 }
 
 func NewState(protocol string) State {
@@ -98,7 +101,7 @@ func NewState(protocol string) State {
 		StartedAt:       time.Now(),
 		CompletedStages: []string{},
 		StageOutputs:    make(map[string]StageOutput),
-		Approvals:       make(map[string][]Approval),
+		Attestations:    make(map[string][]Attestation),
 		Epistemics: Epistemics{
 			Assumptions:   []Assumption{},
 			OpenQuestions: []OpenQuestion{},
@@ -137,8 +140,8 @@ func Load(path string) (State, error) {
 	if s.StageOutputs == nil {
 		s.StageOutputs = make(map[string]StageOutput)
 	}
-	if s.Approvals == nil {
-		s.Approvals = make(map[string][]Approval)
+	if s.Attestations == nil {
+		s.Attestations = make(map[string][]Attestation)
 	}
 	if s.Epistemics.Assumptions == nil {
 		s.Epistemics.Assumptions = []Assumption{}
@@ -219,4 +222,11 @@ func (s State) IsStageCompleted(id string) bool {
 		}
 	}
 	return false
+}
+
+func (s *State) AddAttestation(stageID string, attestation Attestation) {
+	if s.Attestations == nil {
+		s.Attestations = make(map[string][]Attestation)
+	}
+	s.Attestations[stageID] = append(s.Attestations[stageID], attestation)
 }

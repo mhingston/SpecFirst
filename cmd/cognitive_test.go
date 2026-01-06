@@ -183,7 +183,13 @@ func TestTestIntentCommand(t *testing.T) {
 
 func TestTraceCommand(t *testing.T) {
 	t.Run("generates trace prompt", func(t *testing.T) {
-		prompt := generateTracePrompt("# Spec", "test.md")
+		prompt, err := prompts.Render("trace.md", prompts.SpecData{
+			Spec:   "# Spec",
+			Source: "test.md",
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		if !strings.Contains(prompt, "traceability mapping") {
 			t.Error("expected prompt to contain 'traceability mapping'")

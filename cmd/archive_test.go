@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"specfirst/internal/assets"
+	"specfirst/internal/snapshot"
 	"specfirst/internal/store"
 )
 
@@ -35,7 +36,8 @@ func TestCreateArchiveRequiresTemplates(t *testing.T) {
 		t.Fatalf("write protocol: %v", err)
 	}
 
-	err = createArchive("1.0", nil, "")
+	mgr := snapshot.NewManager(store.ArchivesPath())
+	err = mgr.Create("1.0", nil, "")
 	if err == nil {
 		t.Fatalf("expected error when templates directory is missing")
 	}
@@ -172,8 +174,10 @@ func TestCreateArchive_MissingArtifact(t *testing.T) {
 		t.Fatalf("write state: %v", err)
 	}
 
+	mgr := snapshot.NewManager(store.ArchivesPath())
+
 	// Try to create archive - should fail because requirements/foo.md is missing
-	err = createArchive("1.0", nil, "")
+	err = mgr.Create("1.0", nil, "")
 	if err == nil {
 		t.Fatalf("expected error for missing artifact")
 	}
@@ -190,7 +194,7 @@ func TestCreateArchive_MissingArtifact(t *testing.T) {
 		t.Fatalf("write artifact: %v", err)
 	}
 
-	err = createArchive("1.0", nil, "")
+	err = mgr.Create("1.0", nil, "")
 	if err != nil {
 		t.Fatalf("unexpected error after creating artifact: %v", err)
 	}

@@ -93,7 +93,7 @@ func (e *Engine) Check(failOnWarnings bool) error {
 
 	for _, approval := range e.Protocol.Approvals {
 		if e.State.IsStageCompleted(approval.Stage) {
-			if !e.State.HasApproval(approval.Stage, approval.Role) {
+			if !e.State.HasAttestation(approval.Stage, approval.Role, "approved") {
 				addWarning("Approvals", fmt.Sprintf("Missing approval for stage %s (role: %s)", approval.Stage, approval.Role))
 			}
 		}

@@ -30,7 +30,8 @@ func init() {
 
 // SpecData is the data structure for single-spec prompts.
 type SpecData struct {
-	Spec string
+	Spec   string
+	Source string
 }
 
 // DiffData is the data structure for diff/comparison prompts.

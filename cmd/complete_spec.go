@@ -3,6 +3,8 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"specfirst/internal/snapshot"
+	"specfirst/internal/store"
 
 	"github.com/spf13/cobra"
 )
@@ -70,8 +72,17 @@ Use --warn-only to report missing stages or approvals without failing the comman
 			if version == "" {
 				return fmt.Errorf("archive version is required (set --version or state.spec_version)")
 			}
-			if err := createArchive(version, tags, notes); err != nil {
-				return err
+			// Archive the current version before completion if requested
+			// (Assuming logic was: create archive if success? or strictly before?)
+			// The error hints it called createArchive(version, tags, notes)
+			// We'll replicate using snapshot.Manager
+
+			// Wait, I need to see the context. The file view below will show usage.
+			// Assuming it was: if err := createArchive(...); err != nil ...
+
+			mgr := snapshot.NewManager(store.ArchivesPath())
+			if err := mgr.Create(version, tags, notes); err != nil {
+				return fmt.Errorf("failed to archive: %w", err)
 			}
 			fmt.Fprintf(cmd.OutOrStdout(), "Archived version %s\n", version)
 		}

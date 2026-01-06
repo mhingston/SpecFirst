@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 
 	"strings"
 
@@ -65,9 +66,9 @@ func Load(protocolOverride string) (*Engine, error) {
 	return NewEngine(cfg, proto, s), nil
 }
 
-// ApproveStage records an approval for a stage.
+// AttestStage records an attestation for a stage.
 // Returns a list of warnings and any error that occurred.
-func (e *Engine) ApproveStage(stageID, role, user, notes string) ([]string, error) {
+func (e *Engine) AttestStage(stageID, role, user, status, notes string, conditions []string) ([]string, error) {
 	var warnings []string
 
 	// 1. Verify approval is declared in protocol
@@ -84,13 +85,21 @@ func (e *Engine) ApproveStage(stageID, role, user, notes string) ([]string, erro
 
 	// 2. Warn if stage is not completed (but allow it)
 	if !e.State.IsStageCompleted(stageID) {
-		warnings = append(warnings, fmt.Sprintf("stage %s is not yet completed; approval recorded preemptively", stageID))
+		warnings = append(warnings, fmt.Sprintf("stage %s is not yet completed; attestation recorded preemptively", stageID))
 	}
 
-	// 3. Record approval in state
-	updated := e.State.RecordApproval(stageID, role, user, notes)
+	// 3. Record approval in state (as Attestation)
+	attestation := state.Attestation{
+		Role:       role,
+		AttestedBy: user,
+		Status:     status,
+		Rationale:  notes,
+		Conditions: conditions,
+		Date:       time.Now().UTC(),
+	}
+	updated := e.State.RecordAttestation(stageID, attestation)
 	if updated {
-		warnings = append(warnings, fmt.Sprintf("updating existing approval for role %s", role))
+		warnings = append(warnings, fmt.Sprintf("updating existing attestation for role %s", role))
 	}
 
 	// 4. Save state

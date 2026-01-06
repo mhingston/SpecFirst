@@ -3,9 +3,7 @@ package store
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"strings"
 )
 
 const (
@@ -15,6 +13,7 @@ const (
 	ProtocolsDir = "protocols"
 	TemplatesDir = "templates"
 	ArchivesDir  = "archives"
+	TracksDir    = "tracks"
 	SkillsDir    = "skills"
 	StateFile    = "state.json"
 	ConfigFile   = "config.yaml"
@@ -50,6 +49,11 @@ func ArchivesPath(elem ...string) string {
 	return SpecPath(parts...)
 }
 
+func TracksPath(elem ...string) string {
+	parts := append([]string{TracksDir}, elem...)
+	return SpecPath(parts...)
+}
+
 func SkillsPath(elem ...string) string {
 	parts := append([]string{SkillsDir}, elem...)
 	return SpecPath(parts...)
@@ -64,24 +68,37 @@ func ConfigPath() string {
 }
 
 func BaseDir() string {
-	if root, err := gitRoot(); err == nil && root != "" {
+	wd, err := os.Getwd()
+	if err != nil {
+		return "."
+	}
+	if root, err := FindProjectRoot(wd); err == nil {
 		return root
 	}
-	if wd, err := os.Getwd(); err == nil && wd != "" {
-		return wd
-	}
-	return "."
+	return wd
 }
 
-func gitRoot() (string, error) {
-	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
-	out, err := cmd.Output()
+// FindProjectRoot looks for .specfirst or .git directory walking up from startDir.
+func FindProjectRoot(startDir string) (string, error) {
+	dir, err := filepath.Abs(startDir)
 	if err != nil {
 		return "", err
 	}
-	root := strings.TrimSpace(string(out))
-	if root == "" {
-		return "", fmt.Errorf("empty git root")
+
+	for {
+		// Check for .specfirst
+		if _, err := os.Stat(filepath.Join(dir, SpecDir)); err == nil {
+			return dir, nil
+		}
+		// Check for .git
+		if _, err := os.Stat(filepath.Join(dir, ".git")); err == nil {
+			return dir, nil
+		}
+
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return "", fmt.Errorf("project root not found (no .specfirst or .git in parents of %s)", startDir)
+		}
+		dir = parent
 	}
-	return root, nil
 }

@@ -50,10 +50,14 @@ Protocols can include a `decompose` stage that breaks down a design into a list 
 3. List tasks: `specfirst task`.
 4. Generate a prompt for a specific task: `specfirst task T1`.
 
-### Approvals
-Stages can required approvals from specific roles (e.g., `architect`, `product`).
+### Attestations (Approvals)
+Stages can require attestations from specific roles (e.g., `architect`, `product`).
 ```bash
-specfirst approve requirements --role architect --by "Jane Doe"
+specfirst attest requirements --role architect --status approved --by "Jane Doe"
+```
+You can also approve with conditions or reject:
+```bash
+specfirst attest design --role security --status approved_with_conditions --condition "Must use TLS 1.3"
 ```
 
 ### Validation
@@ -66,7 +70,12 @@ specfirst complete-spec --archive --version 1.0
 ```
 This creates a snapshot of the entire workspace.
 
-## Team Collaboration
+### Parallel Futures (Tracks)
+For experimental work or exploring alternative designs, create a track:
+1. Create a track: `specfirst track create experiment-a`
+2. Switch context: `specfirst track switch experiment-a` (Note: This overwrites your current workspace!)
+3. Work in the track...
+4. Merge back: `specfirst track merge experiment-a` (generates a merge plan).
 
 **Use case**: Multiple developers working on different tasks from decomposition.
 

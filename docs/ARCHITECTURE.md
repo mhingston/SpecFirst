@@ -24,13 +24,16 @@ The "heart" of the system. A protocol (`protocol.yaml`) defines a series of **st
 *   **Canonical Truth:** The `state.json` is the source of truth for the *workflow engine*, while the disk is the source of truth for the *project content*.
 
 ### 3. Archive Philosophy
-When you run `spec archive`, the system captures more than just a snapshot of the code. It captures:
+When you run `specfirst archive`, the system captures more than just a snapshot of the code. It captures:
 1.  **Context:** The specific protocol and versions used.
 2.  **Intent:** The filled-out templates (assumptions, calibrations).
 3.  **Traceability:** Who approved each stage and when.
 
 **Workspace Debris vs. Tracked Artifacts:**
 SpecFirst distinguishes between temporary files (debris) and meaningful records (artifacts). Archives focus on preserving the path taken to reach the result, ensuring that "restoring" an archive brings back the full context of the decision-making process, not just the final bytes.
+
+**Tracks (Parallel Futures):**
+Tracks extend the archive philosophy to support branching futures. A "track" is simply a named snapshot that lives in `.specfirst/tracks` instead of `.specfirst/archives`. Usage the `internal/snapshot` engine, tracks allow you to save your current state, experiment in a different direction, and then `restore` (switch) between them.
 
 ## Restore Semantics
 *   **Restore** means recreating the exact state of a project at a specific point in time.
@@ -57,9 +60,10 @@ The heart of the application logic. The `Engine`:
 ### 3. Domain Primitives (`internal/protocol`, `internal/state`, `internal/task`)
 Pure data structures and validation logic for the core concepts of SpecFirst. These packages have minimal dependencies.
 
-### 4. Infrastructure & Utilities (`internal/workspace`, `internal/store`, `internal/prompt`, `internal/template`)
+### 4. Infrastructure & Utilities (`internal/workspace`, `internal/store`, `internal/prompt`, `internal/template`, `internal/snapshot`)
 Low-level services that handle technical details:
 -   **`workspace`**: File system operations, artifact resolution, hashing, and atomic writes.
 -   **`store`**: Path management for standard directories (`.specfirst/`).
 -   **`template`**: Text processing and rendering.
+-   **`snapshot`**: Core logic for archiving, tracking, restoring, and comparing workspace states.
 

@@ -34,7 +34,7 @@ To use this protocol in a new project:
 
 3. Run the workflow stages:
    ```bash
-   gemini "$(specfirst product-vision)" > product/product-overview.md
+   opencode run "$(specfirst product-vision)" > product/product-overview.md
    ```
 
 ## Section Looping
@@ -50,13 +50,13 @@ This protocol supports iteration via `repeatable: true` stages. To design multip
 
 2. Run the section stages:
    ```bash
-   gemini "$(specfirst shape-section)"
+   opencode run "$(specfirst shape-section)"
    # Complete with: specfirst complete shape-section product/sections/invoices/spec.md
    
-   gemini "$(specfirst sample-data)"
+   opencode run "$(specfirst sample-data)"
    # Complete with: specfirst complete sample-data product/sections/invoices/data.json product/sections/invoices/types.ts
    
-   gemini "$(specfirst design-screen)"
+   opencode run "$(specfirst design-screen)"
    # Complete with: specfirst complete design-screen src/sections/invoices/InvoiceList.tsx ...
    ```
 

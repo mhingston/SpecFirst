@@ -71,7 +71,7 @@ func init() {
 	rootCmd.AddCommand(lintCmd)
 	rootCmd.AddCommand(protocolCmd)
 	rootCmd.AddCommand(archiveCmd)
-	rootCmd.AddCommand(approveCmd)
+	rootCmd.AddCommand(attestCmd)
 	rootCmd.AddCommand(checkCmd)
 
 	// Cognitive scaffold commands

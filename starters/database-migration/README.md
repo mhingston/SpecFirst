@@ -16,12 +16,12 @@ You can run this example immediately using the `--protocol` override:
  
 1. **Requirements**:
    ```bash
-   gemini "$(specfirst --protocol starters/database-migration/protocol.yaml requirements)"
+   opencode run "$(specfirst --protocol starters/database-migration/protocol.yaml requirements)"
    ```
  
 2. **Migration Plan**:
    ```bash
-   gemini "$(specfirst --protocol starters/database-migration/protocol.yaml migration-plan)"
+   opencode run "$(specfirst --protocol starters/database-migration/protocol.yaml migration-plan)"
    ```
  
 ## Setup (For a new project)
@@ -45,7 +45,7 @@ To use this protocol in your own project:
 
 Define what needs to change:
 ```bash
-gemini "$(specfirst requirements)" > requirements.md
+opencode run "$(specfirst requirements)" > requirements.md
 specfirst complete requirements ./requirements.md
 ```
 
@@ -53,7 +53,7 @@ specfirst complete requirements ./requirements.md
 
 Generate detailed migration SQL and steps:
 ```bash
-gemini "$(specfirst migration-plan)" > migration-plan.md
+opencode run "$(specfirst migration-plan)" > migration-plan.md
 specfirst complete migration-plan ./migration-plan.md
 ```
 
@@ -68,7 +68,7 @@ specfirst approve migration-plan --role dba --by "Jane DBA"
 
 Surface risks before creating rollback plan:
 ```bash
-gemini "$(specfirst failure-modes ./migration-plan.md)"
+opencode run "$(specfirst failure-modes ./migration-plan.md)"
 ```
 
 Review output and incorporate into rollback strategy.
@@ -77,7 +77,7 @@ Review output and incorporate into rollback strategy.
 
 Plan for what to do if migration fails:
 ```bash
-gemini "$(specfirst rollback-plan)" > rollback-plan.md
+opencode run "$(specfirst rollback-plan)" > rollback-plan.md
 specfirst complete rollback-plan ./rollback-plan.md
 ```
 
@@ -92,7 +92,7 @@ specfirst approve rollback-plan --role ops --by "Bob Ops"
 
 Run the migration with monitoring:
 ```bash
-gemini -i "$(specfirst execute)"
+opencode --prompt "$(specfirst execute)"
 # Follow the plan step by step, documenting as you go
 specfirst complete execute ./migration-log.md ./scripts/*.sql
 ```

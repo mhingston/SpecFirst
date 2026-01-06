@@ -37,6 +37,13 @@ func (e *Engine) CompleteStage(stageID string, outputFiles []string, force bool,
 		return err
 	}
 
+	// Ambiguity Gates
+	if !force {
+		if err := e.ValidateAmbiguityGates(stage); err != nil {
+			return err
+		}
+	}
+
 	// Task List Validation
 	if stage.Type == "decompose" {
 		for _, file := range outputFiles {
@@ -95,9 +102,8 @@ func (e *Engine) CompleteStage(stageID string, outputFiles []string, force bool,
 
 		// actually `workspace.ArtifactRelFromState` is for reading artifacts.
 
-		// Let's proceed with `filepath.Rel` from CWD as best effort.
-		cwd, _ := os.Getwd()
-		relPath, err := filepath.Rel(cwd, resolved)
+		// Use workspace.ProjectRelPath to determine artifact path
+		relPath, err := workspace.ProjectRelPath(resolved)
 		if err != nil {
 			return err
 		}
@@ -183,5 +189,56 @@ func (e *Engine) ValidateOutputs(stage protocol.Stage, outputFiles []string) err
 	// Simplified validation: assume outputFiles match patterns if passed.
 	// But strictly we should check.
 	// We lack `outputRelPath` easily available here without re-implementing repo root logic.
+	return nil
+}
+
+func (e *Engine) ValidateAmbiguityGates(stage protocol.Stage) error {
+	// 1. Check Open Questions Limit
+	if stage.MaxOpenQuestions != nil {
+		limit := *stage.MaxOpenQuestions
+		openCount := 0
+		for _, q := range e.State.Epistemics.OpenQuestions {
+			if q.Status == "open" {
+				openCount++
+			}
+		}
+		if openCount > limit {
+			return fmt.Errorf("ambiguity gate failure: %d open questions (max %d)", openCount, limit)
+		}
+	}
+
+	// 2. Check Must Resolve Tags
+	if len(stage.MustResolveTags) > 0 {
+		for _, q := range e.State.Epistemics.OpenQuestions {
+			if q.Status != "open" {
+				continue
+			}
+			for _, tag := range q.Tags {
+				for _, requiredTag := range stage.MustResolveTags {
+					if tag == requiredTag {
+						return fmt.Errorf("ambiguity gate failure: open question %q has must-resolve tag %q", q.ID, tag)
+					}
+				}
+			}
+		}
+	}
+
+	// 3. Check High Risks Limit
+	if stage.MaxHighRisksUnmitigated != nil {
+		limit := *stage.MaxHighRisksUnmitigated
+		highRiskCount := 0
+		for _, r := range e.State.Epistemics.Risks {
+			if r.Status == "mitigated" || r.Status == "accepted" {
+				continue
+			}
+			if r.Severity == "high" {
+				highRiskCount++
+			}
+		}
+		if highRiskCount > limit {
+			return fmt.Errorf("ambiguity gate failure: %d unmitigated high risks (max %d)", highRiskCount, limit)
+		}
+	}
+
 	return nil
 }

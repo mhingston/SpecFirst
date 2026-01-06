@@ -82,8 +82,8 @@ func loadState() (state.State, error) {
 	if s.StageOutputs == nil {
 		s.StageOutputs = map[string]state.StageOutput{}
 	}
-	if s.Approvals == nil {
-		s.Approvals = map[string][]state.Approval{}
+	if s.Attestations == nil {
+		s.Attestations = make(map[string][]state.Attestation)
 	}
 	return s, nil
 }
@@ -109,47 +109,7 @@ func copyDirWithOpts(src, dst string, required bool) error {
 }
 
 func outputRelPath(output string) (string, error) {
-	if output == "" {
-		return "", fmt.Errorf("output path is empty")
-	}
-	clean := filepath.Clean(output)
-	baseDir := repoRoot()
-	if baseDir == "" {
-		wd, err := os.Getwd()
-		if err != nil {
-			return "", err
-		}
-		baseDir = wd
-	}
-	baseEval, err := filepath.EvalSymlinks(baseDir)
-	if err == nil {
-		baseDir = baseEval
-	}
-	abs := clean
-	if !filepath.IsAbs(abs) {
-		wd, err := os.Getwd()
-		if err != nil {
-			return "", err
-		}
-		abs = filepath.Join(wd, clean)
-	}
-	if absEval, err := filepath.EvalSymlinks(abs); err == nil {
-		abs = absEval
-	} else if dirEval, err := filepath.EvalSymlinks(filepath.Dir(abs)); err == nil {
-		abs = filepath.Join(dirEval, filepath.Base(abs))
-	}
-	rel, err := filepath.Rel(baseDir, abs)
-	if err != nil {
-		return "", err
-	}
-	clean = rel
-	if clean == "." {
-		return "", fmt.Errorf("output path resolves to current directory")
-	}
-	if clean == ".." || strings.HasPrefix(clean, ".."+string(os.PathSeparator)) {
-		return "", fmt.Errorf("output path escapes workspace: %s", output)
-	}
-	return clean, nil
+	return workspace.ProjectRelPath(output)
 }
 
 func resolveOutputPath(output string) (string, error) {
@@ -159,11 +119,17 @@ func resolveOutputPath(output string) (string, error) {
 	}
 	baseDir := repoRoot()
 	if baseDir == "" {
+		// Fallback if repoRoot fails (shouldn't happen if outputRelPath worked)
 		wd, err := os.Getwd()
 		if err != nil {
 			return "", err
 		}
-		baseDir = wd
+		// Try to find root again or default to WD
+		if root, err := store.FindProjectRoot(wd); err == nil {
+			baseDir = root
+		} else {
+			baseDir = wd
+		}
 	}
 	return filepath.Join(baseDir, rel), nil
 }
@@ -261,6 +227,7 @@ func compilePrompt(stage protocol.Stage, cfg config.Config, stageIDs []string) (
 		StageType:      stage.Type,
 		Prompt:         stage.Prompt,
 		OutputContract: stage.Output,
+		Epistemics:     nil, // Epistemics not available in this context (static check)
 	}
 
 	templatePath := store.TemplatesPath(stage.Template)
@@ -347,9 +314,9 @@ func requireStageDependencies(s state.State, stage protocol.Stage) error {
 	return nil
 }
 
-func hasApproval(records []state.Approval, role string) bool {
+func hasApproval(records []state.Attestation, role string) bool {
 	for _, record := range records {
-		if record.Role == role {
+		if record.Role == role && record.Status == "approved" {
 			return true
 		}
 	}
@@ -362,7 +329,7 @@ func missingApprovals(p protocol.Protocol, s state.State) []string {
 		if !s.IsStageCompleted(approval.Stage) {
 			continue
 		}
-		if !hasApproval(s.Approvals[approval.Stage], approval.Role) {
+		if !hasApproval(s.Attestations[approval.Stage], approval.Role) {
 			missing = append(missing, fmt.Sprintf("%s:%s", approval.Stage, approval.Role))
 		}
 	}
@@ -386,8 +353,8 @@ func ensureStateInitialized(s state.State, proto protocol.Protocol) state.State 
 	if s.StageOutputs == nil {
 		s.StageOutputs = map[string]state.StageOutput{}
 	}
-	if s.Approvals == nil {
-		s.Approvals = map[string][]state.Approval{}
+	if s.Attestations == nil {
+		s.Attestations = map[string][]state.Attestation{}
 	}
 	return s
 }
@@ -426,15 +393,12 @@ func heredocDelimiter(prompt string) string {
 }
 
 func repoRoot() string {
-	lines, err := gitCmd("rev-parse", "--show-toplevel")
+	wd, err := os.Getwd()
 	if err != nil {
 		return ""
 	}
-	if len(lines) == 0 {
-		return ""
-	}
-	root := strings.TrimSpace(lines[0])
-	if root == "" {
+	root, err := store.FindProjectRoot(wd)
+	if err != nil {
 		return ""
 	}
 	return root

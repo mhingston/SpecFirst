@@ -21,10 +21,10 @@ You can run this example immediately using the `--protocol` override:
 
 1. **Requirements**:
    ```bash
-   gemini "$(specfirst --protocol starters/todo-cli/protocol.yaml reqs)"
+   opencode run "$(specfirst --protocol starters/todo-cli/protocol.yaml reqs)"
    ```
    
 2. **Design**:
    ```bash
-   gemini "$(specfirst --protocol starters/todo-cli/protocol.yaml design)"
+   opencode run "$(specfirst --protocol starters/todo-cli/protocol.yaml design)"
    ```

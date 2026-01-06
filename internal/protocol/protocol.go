@@ -44,6 +44,11 @@ type Stage struct {
 
 	// For task_prompt type - reference to decompose stage
 	Source string `yaml:"source,omitempty"`
+
+	// Ambiguity Gates
+	MaxOpenQuestions        *int     `yaml:"max_open_questions,omitempty"`
+	MustResolveTags         []string `yaml:"must_resolve_tags,omitempty"`
+	MaxHighRisksUnmitigated *int     `yaml:"max_high_risks_unmitigated,omitempty"`
 }
 
 // PromptConfig defines prompt generation parameters.

@@ -116,7 +116,7 @@ var lintCmd = &cobra.Command{
 			if !s.IsStageCompleted(approval.Stage) {
 				continue
 			}
-			records := s.Approvals[approval.Stage]
+			records := s.Attestations[approval.Stage]
 			if !hasApproval(records, approval.Role) {
 				addWarning("Approvals", fmt.Sprintf("Missing approval for stage %s (role: %s)", approval.Stage, approval.Role))
 			}

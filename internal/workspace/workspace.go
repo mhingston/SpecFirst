@@ -363,3 +363,74 @@ func CollectFileHashes(root string) (map[string]string, error) {
 	}
 	return files, nil
 }
+
+// ProjectRelPath returns the path relative to the project root.
+func ProjectRelPath(path string) (string, error) {
+	if path == "" {
+		return "", fmt.Errorf("path is empty")
+	}
+
+	clean := filepath.Clean(path)
+
+	// Determine project root
+	wd, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	root, err := store.FindProjectRoot(wd)
+	if err != nil {
+		return "", err
+	}
+
+	// Resolve absolute path
+	abs := clean
+	if !filepath.IsAbs(abs) {
+		abs = filepath.Join(wd, clean)
+	}
+
+	// Evaluate symlinks for canonical path comparison
+	// We must resolve the root to its canonical form
+	if rootEval, err := filepath.EvalSymlinks(root); err == nil {
+		root = rootEval
+	}
+
+	// We must also resolve abs to its canonical form as much as possible
+	// Walk up until we find a directory that exists
+	base := abs
+	suffix := ""
+	for {
+		if _, err := os.Stat(base); err == nil {
+			// Found existing path
+			break
+		}
+		parent := filepath.Dir(base)
+		if parent == base {
+			break
+		}
+		suffix = filepath.Join(filepath.Base(base), suffix)
+		base = parent
+	}
+
+	if baseEval, err := filepath.EvalSymlinks(base); err == nil {
+		if suffix != "" {
+			abs = filepath.Join(baseEval, suffix)
+		} else {
+			abs = baseEval
+		}
+	}
+
+	rel, err := filepath.Rel(root, abs)
+	if err != nil {
+		return "", err
+	}
+
+	// Safety checks
+	if rel == ".." || strings.HasPrefix(rel, ".."+string(os.PathSeparator)) {
+		return "", fmt.Errorf("path escapes project root: %s", path)
+	}
+	if rel == "." {
+		return "", fmt.Errorf("path resolves to project root")
+	}
+
+	return rel, nil
+}

@@ -28,6 +28,7 @@ type Data struct {
 	StageType      string
 	Prompt         any
 	OutputContract any
+	Epistemics     any
 }
 
 // Render renders a template file with the given data.

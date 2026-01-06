@@ -16,12 +16,12 @@ You can run this example immediately using the `--protocol` override:
  
 1. **Draft**:
    ```bash
-   gemini "$(specfirst --protocol starters/spec-review/protocol.yaml draft)"
+   opencode run "$(specfirst --protocol starters/spec-review/protocol.yaml draft)"
    ```
  
 2. **Finalize**:
    ```bash
-   gemini "$(specfirst --protocol starters/spec-review/protocol.yaml finalize)"
+   opencode run "$(specfirst --protocol starters/spec-review/protocol.yaml finalize)"
    ```
  
 ## Setup (For a new project)
@@ -45,7 +45,7 @@ To use this protocol in your own project:
 
 Generate the draft prompt:
 ```bash
-gemini "$(specfirst draft)" > spec-draft.md
+opencode run "$(specfirst draft)" > spec-draft.md
 ```
 
 Complete the stage:
@@ -57,7 +57,7 @@ specfirst complete draft ./spec-draft.md
 
 Identify what you're assuming but haven't stated:
 ```bash
-gemini "$(specfirst assumptions ./spec-draft.md)" > assumptions-found.md
+opencode run "$(specfirst assumptions ./spec-draft.md)" > assumptions-found.md
 ```
 
 Review the output and update your draft with explicit assumptions.
@@ -68,17 +68,17 @@ Get different perspectives on your spec:
 
 **Security review:**
 ```bash
-gemini "$(specfirst review ./spec-draft.md --persona security)" > security-review.md
+opencode run "$(specfirst review ./spec-draft.md --persona security)" > security-review.md
 ```
 
 **Performance review:**
 ```bash
-gemini "$(specfirst review ./spec-draft.md --persona performance)" > performance-review.md
+opencode run "$(specfirst review ./spec-draft.md --persona performance)" > performance-review.md
 ```
 
 **Maintainability review:**
 ```bash
-gemini "$(specfirst review ./spec-draft.md --persona maintainer)" > maintainer-review.md
+opencode run "$(specfirst review ./spec-draft.md --persona maintainer)" > maintainer-review.md
 ```
 
 Address concerns in your draft.
@@ -87,7 +87,7 @@ Address concerns in your draft.
 
 Identify what could go wrong:
 ```bash
-gemini "$(specfirst failure-modes ./spec-draft.md)" > failure-analysis.md
+opencode run "$(specfirst failure-modes ./spec-draft.md)" > failure-analysis.md
 ```
 
 Add risk mitigation to your spec based on findings.
@@ -96,7 +96,7 @@ Add risk mitigation to your spec based on findings.
 
 Identify areas where you're uncertain:
 ```bash
-gemini "$(specfirst calibrate ./spec-draft.md --mode confidence)" > confidence-report.md
+opencode run "$(specfirst calibrate ./spec-draft.md --mode confidence)" > confidence-report.md
 ```
 
 Strengthen low-confidence areas or mark them as open questions.
@@ -105,7 +105,7 @@ Strengthen low-confidence areas or mark them as open questions.
 
 Surface vague language:
 ```bash
-gemini "$(specfirst calibrate ./spec-draft.md --mode uncertainty)" > ambiguity-check.md
+opencode run "$(specfirst calibrate ./spec-draft.md --mode uncertainty)" > ambiguity-check.md
 ```
 
 Clarify any ambiguous statements.
@@ -114,7 +114,7 @@ Clarify any ambiguous statements.
 
 Incorporate all feedback and create final spec:
 ```bash
-gemini "$(specfirst finalize)" > spec-final.md
+opencode run "$(specfirst finalize)" > spec-final.md
 specfirst complete finalize ./spec-final.md
 ```
 

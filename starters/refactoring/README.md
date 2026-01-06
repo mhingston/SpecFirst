@@ -13,12 +13,12 @@ You can run this example immediately using the `--protocol` override:
  
 1. **Current State**:
    ```bash
-   gemini "$(specfirst --protocol starters/refactoring/protocol.yaml current-state)"
+   opencode run "$(specfirst --protocol starters/refactoring/protocol.yaml current-state)"
    ```
  
 2. **Goals**:
    ```bash
-   gemini "$(specfirst --protocol starters/refactoring/protocol.yaml goals)"
+   opencode run "$(specfirst --protocol starters/refactoring/protocol.yaml goals)"
    ```
  
 ## Setup (For a new project)
@@ -43,10 +43,10 @@ To use this protocol in your own project:
 Map existing code to understand what you're refactoring:
 ```bash
 # Map code to specifications
-gemini "$(specfirst trace ./path/to/current-code.go)"
+opencode run "$(specfirst trace ./path/to/current-code.go)"
 
 # Generate current state analysis
-gemini "$(specfirst current-state)" > current-state.md
+opencode run "$(specfirst current-state)" > current-state.md
 specfirst complete current-state ./current-state.md
 ```
 
@@ -54,7 +54,7 @@ specfirst complete current-state ./current-state.md
 
 Set clear, measurable refactoring objectives:
 ```bash
-gemini "$(specfirst goals)" > goals.md
+opencode run "$(specfirst goals)" > goals.md
 specfirst complete goals ./goals.md
 ```
 
@@ -62,14 +62,14 @@ specfirst complete goals ./goals.md
 
 Before planning, surface potential problems:
 ```bash
-gemini "$(specfirst failure-modes ./goals.md)"
+opencode run "$(specfirst failure-modes ./goals.md)"
 ```
 
 ### 4. Create Refactoring Plan
 
 Generate detailed step-by-step plan:
 ```bash
-gemini "$(specfirst plan)" > plan.md
+opencode run "$(specfirst plan)" > plan.md
 specfirst complete plan ./plan.md
 ```
 
@@ -77,7 +77,7 @@ specfirst complete plan ./plan.md
 
 Follow the plan step by step:
 ```bash
-gemini -i "$(specfirst execute)"
+opencode --prompt "$(specfirst execute)"
 # Implement changes following the plan
 specfirst complete execute ./path/to/refactored-code.go ./tests/
 ```
@@ -86,7 +86,7 @@ specfirst complete execute ./path/to/refactored-code.go ./tests/
 
 Confirm goals met and behavior preserved:
 ```bash
-gemini "$(specfirst verify)" > verification-report.md
+opencode run "$(specfirst verify)" > verification-report.md
 specfirst complete verify ./verification-report.md
 ```
 
@@ -94,7 +94,7 @@ specfirst complete verify ./verification-report.md
 
 Analyze the changes made:
 ```bash
-gemini "$(specfirst diff ./current-state.md ./verification-report.md)"
+opencode run "$(specfirst diff ./current-state.md ./verification-report.md)"
 ```
 
 ## Timeline

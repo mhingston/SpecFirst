@@ -4,33 +4,26 @@ import (
 	"time"
 )
 
-// RecordApproval adds or updates an approval for a stage.
-// It returns true if the approval was updated (existed previously).
-func (s *State) RecordApproval(stageID, role, user, notes string) bool {
-	if s.Approvals == nil {
-		s.Approvals = make(map[string][]Approval)
-	}
-
-	newApproval := Approval{
-		Role:       role,
-		ApprovedBy: user,
-		ApprovedAt: time.Now().UTC(),
-		Notes:      notes,
+// RecordAttestation adds or updates an attestation for a stage.
+// It returns true if the attestation was updated (existed previously).
+func (s *State) RecordAttestation(stageID string, attestation Attestation) bool {
+	if s.Attestations == nil {
+		s.Attestations = make(map[string][]Attestation)
 	}
 
 	updated := false
-	approvals := s.Approvals[stageID]
-	for i, existing := range approvals {
-		if existing.Role == role {
-			approvals[i] = newApproval
+	attestations := s.Attestations[stageID]
+	for i, existing := range attestations {
+		if existing.Role == attestation.Role {
+			attestations[i] = attestation
 			updated = true
 			break
 		}
 	}
 	if !updated {
-		s.Approvals[stageID] = append(approvals, newApproval)
+		s.Attestations[stageID] = append(attestations, attestation)
 	} else {
-		s.Approvals[stageID] = approvals // Re-assign if we updated in place (map slice)
+		s.Attestations[stageID] = attestations // Re-assign if we updated in place (map slice)
 	}
 	return updated
 }
@@ -44,6 +37,7 @@ func (s *State) UpdateStageOutput(stageID string, files []string, promptHash str
 		CompletedAt: time.Now().UTC(),
 		Files:       files,
 		PromptHash:  promptHash,
+		// Assuming OutputRelPath logic is handled by caller or unnecessary here
 	}
 
 	// Mark stage as completed if not already
@@ -59,15 +53,18 @@ func (s *State) UpdateStageOutput(stageID string, files []string, promptHash str
 	}
 }
 
-// HasApproval checks if a specific role has approved a stage.
-func (s *State) HasApproval(stageID, role string) bool {
-	approvals, ok := s.Approvals[stageID]
+// HasAttestation checks if a specific role has an attestation with a specific status.
+// If status is empty, checks for any attestation.
+func (s *State) HasAttestation(stageID, role, status string) bool {
+	attestations, ok := s.Attestations[stageID]
 	if !ok {
 		return false
 	}
-	for _, a := range approvals {
+	for _, a := range attestations {
 		if a.Role == role {
-			return true
+			if status == "" || a.Status == status {
+				return true
+			}
 		}
 	}
 	return false

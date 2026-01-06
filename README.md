@@ -250,10 +250,10 @@ specfirst requirements | claude -p
 copilot -p "$(specfirst requirements)" --allow-all-tools
 
 # Gemini CLI (non-interactive prompt)
-gemini "$(specfirst implementation)"
+opencode run "$(specfirst implementation)"
 
 # Gemini CLI (via stdin)
-specfirst implementation | gemini
+specfirst implementation | opencode run
 ```
 
 #### 3. Pipelining Back to SpecFirst
@@ -268,7 +268,7 @@ specfirst requirements | claude -p | specfirst complete requirements -
 
 ```bash
 # Gemini one-shot to file
-gemini "$(specfirst requirements)" > requirements.md
+opencode run "$(specfirst requirements)" > requirements.md
 ```
 
 ## End-to-End Example (Default Protocol)
@@ -354,7 +354,8 @@ specfirst --interactive --out interactive.prompt.txt
 - `specfirst check [--fail-on-warnings]` runs a **preflight / hygiene report** including all non-blocking validations (lint, tasks, approvals, outputs).
 - `specfirst archive <version>` manages workspace archives.
 - `specfirst protocol list|show|create` manages protocol definitions.
-- `specfirst approve <stage-id> --role <role>` records approvals.
+- `specfirst attest <stage-id> --role <role> --status <status>` records attestations with rationale and conditions.
+- `specfirst track create|list|switch|diff|merge` manages parallel futures (tracks).
 
 ### Cognitive Scaffold Commands
 
@@ -406,11 +407,19 @@ These commands generate **prompts only** — no state, no enforcement, no AI cal
 - `archive restore <version> --force` overwrite existing workspace data when restoring (strict restore; removes existing workspace data before restore). Restore now fails if required archive directories (like `protocols/` or `templates/`) are missing.
 - `archive <version>` requires `.specfirst/protocols/` and `.specfirst/templates/` to exist (run `specfirst init` if missing).
 
-## Approval Options
-
-- `--role <role>` (required) the role for the approval.
-- `--by <name>` who approved (defaults to `$USER`).
-- `--notes <text>` optional notes for the approval.
+## Track Options
+ 
+ - `track create <name> --notes <text>` create a new track.
+ - `track switch <name> --force` restore a track to the current workspace (overwrites existing data).
+ - `track merge <source>` generate a merge plan prompt.
+ 
+ ## Attestation Options
+ 
+ - `--role <role>` (required) the role for the attestation.
+ - `--status <status>` (required) status: `approved`, `approved_with_conditions`, `needs_changes`, `rejected`.
+ - `--rationale <text>` rationale for the decision.
+ - `--condition <text>` condition for conditional approval (repeatable).
+ - `--by <name>` who attested (defaults to `$USER`).
 
 ## Workspace Layout
 
