@@ -13,14 +13,14 @@ stages:
     name: Review Scope & Constraints
     type: spec
     intent: planning
-    template: scope.md
+    template: templates/scope.md
     outputs: [scope.md]
     
   - id: architecture-pass
     name: Architecture Pass
     type: spec
     intent: review
-    template: architecture-pass.md
+    template: templates/architecture-pass.md
     depends_on: [scope]
     inputs: [scope.md]
     outputs: [architecture-findings.md]
@@ -29,8 +29,8 @@ stages:
     name: File-Level Review
     type: spec
     intent: review
-    template: file-review.md
-    depends_on: [architecture-pass]
+    template: templates/file-review.md
+    depends_on: [architecture-pass, scope]
     inputs: [scope.md, architecture-findings.md]
     outputs: [file-findings.md]
     
@@ -38,8 +38,8 @@ stages:
     name: Skeptic Pass
     type: spec
     intent: review
-    template: skeptic-pass.md
-    depends_on: [file-review]
+    template: templates/skeptic-pass.md
+    depends_on: [file-review, scope, architecture-pass]
     inputs: [scope.md, file-findings.md, architecture-findings.md]
     outputs: [verified-findings.md]
     
@@ -47,7 +47,7 @@ stages:
     name: Final Review Report
     type: spec
     intent: documentation
-    template: report.md
-    depends_on: [skeptic-pass, scope]
+    template: templates/report.md
+    depends_on: [skeptic-pass, scope, architecture-pass]
     inputs: [scope.md, verified-findings.md, architecture-findings.md]
     outputs: [review-report.md]

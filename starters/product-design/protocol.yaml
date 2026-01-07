@@ -7,7 +7,7 @@ stages:
     name: Product Vision
     type: spec
     intent: exploration
-    template: product-vision.md
+    template: templates/product-vision.md
     outputs:
       - product/product-overview.md
 
@@ -15,7 +15,7 @@ stages:
     name: Product Roadmap
     type: spec
     intent: decision
-    template: product-roadmap.md
+    template: templates/product-roadmap.md
     depends_on: [product-vision]
     inputs:
       - product/product-overview.md
@@ -26,7 +26,7 @@ stages:
     name: Data Model
     type: spec
     intent: decision
-    template: data-model.md
+    template: templates/data-model.md
     depends_on: [product-vision, product-roadmap]
     inputs:
       - product/product-overview.md
@@ -38,7 +38,7 @@ stages:
     name: Design Tokens
     type: spec
     intent: decision
-    template: design-tokens.md
+    template: templates/design-tokens.md
     depends_on: [product-vision, product-roadmap, data-model]
     inputs:
       - product/product-overview.md
@@ -51,7 +51,7 @@ stages:
     name: Application Shell
     type: spec
     intent: execution
-    template: design-shell.md
+    template: templates/design-shell.md
     depends_on: [product-vision, product-roadmap, design-tokens]
     inputs:
       - product/product-overview.md
@@ -69,7 +69,7 @@ stages:
     type: spec
     intent: exploration
     repeatable: true
-    template: shape-section.md
+    template: templates/shape-section.md
     depends_on: [product-vision, product-roadmap, design-shell]
     inputs:
       - product/product-overview.md
@@ -83,7 +83,7 @@ stages:
     type: spec
     intent: execution
     repeatable: true
-    template: sample-data.md
+    template: templates/sample-data.md
     depends_on: [data-model, shape-section]
     inputs:
       - product/data-model/data-model.md
@@ -97,7 +97,7 @@ stages:
     type: spec
     intent: execution
     repeatable: true
-    template: design-screen.md
+    template: templates/design-screen.md
     depends_on: [design-tokens, design-shell, sample-data, shape-section]
     inputs:
       - product/design-system/colors.json
@@ -116,7 +116,7 @@ stages:
     type: spec
     intent: execution
     repeatable: true
-    template: screenshot-design.md
+    template: templates/screenshot-design.md
     depends_on: [shape-section, design-screen]
     inputs:
       - product/sections/*/spec.md
@@ -127,7 +127,7 @@ stages:
     name: Export Product
     type: spec
     intent: execution
-    template: export-product.md
+    template: templates/export-product.md
     depends_on: [product-vision, product-roadmap, data-model, design-tokens, design-shell, shape-section, sample-data, design-screen, screenshot-design]
     inputs:
       - product/product-overview.md

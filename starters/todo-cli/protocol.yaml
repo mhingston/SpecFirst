@@ -5,13 +5,13 @@ stages:
   - id: reqs
     name: Todo CLI Requirements
     type: spec
-    template: requirements.md
+    template: templates/requirements.md
     outputs: [requirements.md]
 
   - id: design
     name: System Design
     type: spec
-    template: design.md
+    template: templates/design.md
     depends_on: [reqs]
     inputs: [requirements.md]
     outputs: [design.md]
@@ -19,7 +19,7 @@ stages:
   - id: breakdown
     name: Task Decomposition
     type: decompose
-    template: decompose.md
+    template: templates/decompose.md
     depends_on: [reqs, design]
     inputs: [requirements.md, design.md]
     outputs: [tasks.yaml]
@@ -30,7 +30,7 @@ stages:
   - id: codes
     name: Task Implementation
     type: task_prompt
-    template: implementation.md
+    template: templates/implementation.md
     depends_on: [reqs, design, breakdown]
     inputs: [requirements.md, design.md, tasks.yaml]
     source: breakdown

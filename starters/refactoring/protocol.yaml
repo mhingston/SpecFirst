@@ -6,14 +6,14 @@ stages:
     name: Current State Analysis
     type: spec
     intent: exploration
-    template: current-state.md
+    template: templates/current-state.md
     outputs: [current-state.md]
     
   - id: goals
     name: Refactoring Goals
     type: spec
     intent: decision
-    template: goals.md
+    template: templates/goals.md
     depends_on: [current-state]
     inputs: [current-state.md]
     outputs: [goals.md]
@@ -22,7 +22,7 @@ stages:
     name: Refactoring Plan
     type: spec
     intent: planning
-    template: plan.md
+    template: templates/plan.md
     depends_on: [current-state, goals]
     inputs: [current-state.md, goals.md]
     outputs: [plan.md]
@@ -31,7 +31,7 @@ stages:
     name: Execute Refactoring
     type: spec
     intent: execution
-    template: execute.md
+    template: templates/execute.md
     depends_on: [plan]
     inputs: [plan.md]
     outputs: []
@@ -40,7 +40,7 @@ stages:
     name: Verification
     type: spec
     intent: review
-    template: verify.md
+    template: templates/verify.md
     depends_on: [execute, plan]
     inputs: [plan.md]
     outputs: [verification-report.md]

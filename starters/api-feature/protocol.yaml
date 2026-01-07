@@ -7,14 +7,14 @@ stages:
     name: Requirements Gathering
     type: spec
     intent: exploration
-    template: requirements.md
+    template: templates/requirements.md
     outputs: [requirements.md]
     
   - id: design
     name: API Design
     type: spec
     intent: decision
-    template: design.md
+    template: templates/design.md
     depends_on: [requirements]
     inputs: [requirements.md]
     outputs: [design.md]
@@ -23,7 +23,7 @@ stages:
     name: Task Breakdown
     type: decompose
     intent: planning
-    template: decompose.md
+    template: templates/decompose.md
     depends_on: [design]
     inputs: [design.md]
     outputs: [tasks.yaml]
@@ -35,7 +35,7 @@ stages:
     name: Implementation
     type: task_prompt
     intent: execution
-    template: implementation.md
+    template: templates/implementation.md
     depends_on: [requirements, design, decompose]
     inputs: [requirements.md, design.md, tasks.yaml]
     source: decompose

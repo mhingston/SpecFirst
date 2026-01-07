@@ -7,14 +7,14 @@ stages:
     name: Bug Analysis
     type: spec
     intent: exploration
-    template: analysis.md
+    template: templates/analysis.md
     outputs: [analysis.md]
     
   - id: fix
     name: Implementation
     type: spec
     intent: execution
-    template: fix.md
+    template: templates/fix.md
     depends_on: [analysis]
     inputs: [analysis.md]
     outputs: []  # Will be actual code files
