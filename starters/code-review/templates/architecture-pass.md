@@ -12,7 +12,7 @@ Conduct a high-level architectural and structural review. **Do not perform file-
 
 ## Output Requirements
 
-Create `architecture-findings.md` with:
+Create `{{ index .Outputs 0 }}` with:
 
 ### 1. Structural Analysis
 - **Core Pattern**: (e.g., Layered, Hexagonal, Spaghetti)

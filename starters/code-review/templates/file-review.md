@@ -12,7 +12,7 @@ Perform a detailed review of individual files within the scoped area. **Architec
 
 ## Output Requirements
 
-Create `file-findings.md` with:
+Create `{{ index .Outputs 0 }}` with:
 
 ### 1. Findings List
 - **Constraint**: Max 12 issues total across all files.

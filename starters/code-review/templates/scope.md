@@ -5,11 +5,12 @@ Define the scope, priorities, and constraints for this code review to ensure it 
 
 ## Output Requirements
 
-Create `scope.md` with the following sections:
+Create `{{ index .Outputs 0 }}` with the following sections:
 
 ### 1. Target Code
 - **Paths**: (e.g., `./src/auth`, `cmd/cli/`)
 - **Exclusions**: (e.g., `*_test.go`, `vendor/`, `generated/`)
+- **CRITICAL**: Never include secrets/credentials in included files; add them to exclusions (.env, .pem, id_rsa, credentials.json, etc.).
 - **Git Context**: (e.g., "Review changes in branch `feature/new-auth` compared to `main`")
 
 ### 2. Review Priorities

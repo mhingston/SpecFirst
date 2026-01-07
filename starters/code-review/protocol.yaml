@@ -1,6 +1,12 @@
 name: "code-review"
 version: "1.0"
 description: "A 5-stage, staged and gated code review workflow designed to converge."
+# Context Requirements:
+# - ProjectName: This protocol expects the runner to inject {{ .ProjectName }} into the template context.
+#
+# Limitations:
+# - Context Window: Detailed file reviews may exceed context limits for large scopes. 
+#   Use 'scope.md' to strictly limit the files under review.
 
 stages:
   - id: scope
@@ -34,7 +40,7 @@ stages:
     intent: review
     template: skeptic-pass.md
     depends_on: [file-review]
-    inputs: [file-findings.md]
+    inputs: [scope.md, file-findings.md, architecture-findings.md]
     outputs: [verified-findings.md]
     
   - id: report
@@ -43,5 +49,5 @@ stages:
     intent: documentation
     template: report.md
     depends_on: [skeptic-pass, scope]
-    inputs: [scope.md, verified-findings.md]
+    inputs: [scope.md, verified-findings.md, architecture-findings.md]
     outputs: [review-report.md]

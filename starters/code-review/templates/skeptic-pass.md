@@ -12,17 +12,25 @@ Act as a skeptic to verify findings and eliminate hallucinations or weak claims.
 
 ## Output Requirements
 
-Create `verified-findings.md` with:
+Create `{{ index .Outputs 0 }}` with:
 
 ### 1. Verification Matrix
 For each finding in `file-findings.md`:
 - **Finding**: (Summary)
-- **Skeptic's Challenge**: Attempt to disprove this finding given the code. Is there a valid reason it was written this way?
+- **Skeptic's Challenge**: Attempt to disprove this finding given the code (see `scope.md` or analyzed files). Is there a valid reason it was written this way?
 - **Confidence Score**: 0-100%
 - **Status**: VERIFIED / DOWNGRADED / REMOVED
 
 ### 2. Filtered Action Items
 Only include items with a **Confidence Score ≥ 70%**.
+**Format**:
+```yaml
+- severity: (Sev0-Sev3)
+  file: (path)
+  identifier: (function/class)
+  description: (summary)
+  fix: (proposed fix)
+```
 - List them by severity.
 - Include the refined reasoning and fix.
 

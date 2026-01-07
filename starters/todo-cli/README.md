@@ -28,3 +28,45 @@ You can run this example immediately using the `--protocol` override:
    ```bash
    opencode run "$(specfirst --protocol starters/todo-cli/protocol.yaml design)"
    ```
+
+## Workflow
+
+After initializing the project, follow these steps:
+
+### 1. Requirements
+
+Generate application requirements:
+```bash
+opencode run "$(specfirst reqs)" > requirements.md
+specfirst complete reqs ./requirements.md
+```
+
+### 2. Design
+
+Create technical design based on requirements:
+```bash
+opencode run "$(specfirst design)" > design.md
+specfirst complete design ./design.md
+```
+
+### 3. Break Down Tasks
+
+Decompose the work into manageable tickets:
+```bash
+opencode run "$(specfirst breakdown)" > tasks.yaml
+specfirst complete breakdown ./tasks.yaml
+```
+
+### 4. Implementation
+
+Implement tasks one by one:
+```bash
+# View tasks
+specfirst task
+
+# Generate prompt for a task (e.g., T1)
+opencode run "$(specfirst codes T1)"
+
+# Mark as complete
+specfirst complete codes ./main.go
+```

@@ -17,6 +17,9 @@ The following variables are available in the top-level template context (`.`):
 | `Framework` | string | Project framework (from config). |
 | `CustomVars` | map[string]string | User-defined variables. |
 | `Constraints` | map[string]string | Project constraints. |
+| `StageType` | string | The type of the current stage (`spec`, `decompose`, etc.). |
+| `Prompt` | PromptConfig | The detailed prompt configuration for the stage. |
+| `OutputContract` | OutputContract | The expected structure of the stage output. |
 
 ### Input Object
 Each item in `Inputs` has:

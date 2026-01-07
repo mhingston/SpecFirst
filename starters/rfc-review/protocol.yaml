@@ -1,0 +1,34 @@
+version: "1"
+
+stages:
+  - id: scope
+    template: templates/scope.md
+    inputs:
+      - inputs/sample_rfc.md
+    outputs:
+      - scope.md
+
+  - id: review
+    template: templates/review.md
+    inputs:
+      - inputs/sample_rfc.md
+      - scope.md
+    outputs:
+      - review.md
+
+  - id: skeptic
+    template: templates/skeptic.md
+    inputs:
+      - inputs/sample_rfc.md
+      - review.md
+    outputs:
+      - skeptic_findings.md
+
+  - id: report
+    template: templates/report.md
+    inputs:
+      - inputs/sample_rfc.md
+      - review.md
+      - skeptic_findings.md
+    outputs:
+      - final_review.md

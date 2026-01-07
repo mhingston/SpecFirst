@@ -1,0 +1,9 @@
+version: "1"
+
+stages:
+  - id: analyze
+    template: templates/postmortem.md
+    inputs:
+      - inputs/incident_log.md
+    outputs:
+      - postmortem.md

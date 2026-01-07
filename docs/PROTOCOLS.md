@@ -33,6 +33,27 @@ Used when `type: decompose` or `type: task_prompt`.
 | `source` | string | For `task_prompt`, the ID of the `decompose` stage providing tasks. |
 | `prompt` | PromptConfig | Configuration for task generation (granularity, etc.). |
 
+### Output Pattern Matching
+
+Output patterns in protocols support single-level wildcards only:
+
+- ✅ `src/*` - matches files directly under `src/`
+- ✅ `*.md` - matches markdown files
+- ❌ `src/**/*.go` - recursive patterns are **not supported**
+
+For complex directory structures, use flat output organization or enumerate specific files.
+Lint will warn if a stage declares wildcard outputs but no stored artifacts match.
+
+### Stage-Qualified Inputs
+
+When the same filename exists in multiple stage artifacts, use stage-qualified paths:
+
+```yaml
+inputs:
+  - requirements/requirements.md  # Explicit stage
+  - design/notes.md
+```
+
 ## Example Protocol
 
 ```yaml

@@ -12,7 +12,7 @@ Synthesize the verified findings into a final, actionable review report.
 
 ## Output Requirements
 
-Create `review-report.md` with:
+Create `{{ index .Outputs 0 }}` with:
 
 ### 1. Executive Summary
 - **Overall Quality Grade**: (A-F)
@@ -20,6 +20,9 @@ Create `review-report.md` with:
 - **Pass/Fail**: Based on the Definition of Done in `scope.md`.
 
 ### 2. Actionable Findings (Verified)
+**CRITICAL**: Only include items from the "Filtered Action Items" section of the skeptic pass. 
+- Look for the YAML-ish block or structured list in that section.
+- **Ignore** any findings marked REMOVED or DOWNGRADED in the verification matrix.
 Grouped by severity (Sev0-Sev3). 
 - Include file, identifier, description, and proposed fix for each.
 

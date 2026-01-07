@@ -26,3 +26,74 @@ By capturing the protocol state—approvals, assumptions, and calibrations—we 
 ## The Role of AI
 
 In SpecFirst, AI is an **adversarial collaborator**. It shouldn't just write code; it should challenge your assumptions, find gaps in your specifications, and help you distill complex logic into verifiable steps.
+
+## Design Principles
+
+The principles below are not incidental — they are design constraints that guide every feature.
+
+> **Litmus Test**: If a proposed feature could change project outcomes without a human making an explicit decision, it does not belong in SpecFirst.
+
+### 1. No Execution
+
+SpecFirst never executes the code it helps specify. It operates entirely in the space of intent, structure, and verification, leaving execution to the developer or external tools (editors, CI, AI CLIs).
+
+### 2. No Automated Planning
+
+SpecFirst does not decide what to do next.
+
+It can generate prompts that help decompose work into tasks, but:
+
+* task lists are human-authored artifacts
+* ordering is human-governed
+* dependencies are descriptive, not prescriptive
+
+SpecFirst describes work; it does not plan it.
+
+### 3. No Task State Machines
+
+SpecFirst records facts (e.g. “this stage was marked complete by a human”), but it does not implement a state machine that automatically advances a workflow.
+
+There is no implicit progression, no automatic transitions, and no hidden lifecycle logic. SpecFirst is a record-keeper, not a workflow engine.
+
+> State in SpecFirst represents recorded human attestations, not automated workflow progression.
+
+### 4. Human Judgment Is the Source of Truth
+
+Whenever judgment is required — “is this task finished?”, “is this design acceptable?”, “does this output meet the intent?” — SpecFirst defers to the human.
+
+Approvals are attestations of human judgment, not the result of automated checks.
+
+### 5. Warnings, Not Enforcement
+
+Validation, linting, and completion checks are advisory by default.
+
+They exist to surface:
+
+* ambiguity
+* missing information
+* weak specifications
+* structural inconsistencies
+
+They are meant to **encourage rigor**, not enforce compliance.
+
+### 6. Prompt Infrastructure, Not Automation
+
+SpecFirst provides infrastructure for generating and validating prompts:
+
+* stage prompts
+* decomposition prompts
+* task-scoped implementation prompts
+
+Everything SpecFirst produces is text.
+SpecFirst never acts on that text.
+
+This makes it composable with any editor, any AI tool, and any delivery process — and keeps humans firmly in control.
+
+## Non-Goals
+
+SpecFirst will never:
+
+- Execute prompts or call LLM APIs
+- Decide task order or auto-advance workflows
+- Score correctness or claim completeness
+- Make decisions without explicit human attestation
