@@ -16,6 +16,7 @@ Incorporate feedback from:
 - Role-based reviews
 - Failure mode analysis
 - Confidence calibration
+- **Production hardening report**
 
 ## Output Requirements
 
@@ -39,6 +40,22 @@ Organized by category:
 ### Architecture/Design
 Technical approach with diagrams if helpful.
 
+### Technical Reliability
+(Incorporate findings from the hardening report)
+
+**Invariants (Crash Conditions)**:
+- List the system invariants identified in the hardening report
+- These are "impossible states" - if violated, the system is corrupt
+- Specify that violation results in immediate termination (panic/crash)
+
+**Observability Contracts**:
+- Define the standard log context fields for this feature
+- Every log line must include enough data to reproduce issues locally
+
+**Error Handling Strategy**:
+- Recoverable errors (retry/backoff)
+- Corrupt state errors (crash/alert)
+
 ### Risk Mitigation
 How we address identified risks and failure modes.
 
@@ -56,10 +73,12 @@ What we're explicitly NOT doing.
 - Strengthen low-confidence areas
 - Be explicit about assumptions
 - Make it reviewable by others
+- **Ensure all hardening requirements are incorporated**
 
 ## Assumptions
 - Reviews have been completed
 - Stakeholders have provided input
+- Production hardening has been performed
 
 
 ## Output Format Constraints
@@ -67,3 +86,4 @@ CRITICAL: You must output ONLY the raw markdown content for the file.
 - Do NOT include any conversational text (e.g. "Here is the file...", "I will now...").
 - Do NOT include markdown code block fences (```markdown ... ```) around the content.
 - Start directly with the markdown content (e.g. # Title).
+

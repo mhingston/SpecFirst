@@ -18,8 +18,13 @@ You can run this example immediately using the `--protocol` override:
    ```bash
    opencode run "$(specfirst --protocol starters/spec-review/protocol.yaml draft)"
    ```
+
+2. **Harden** (Production Hardening):
+   ```bash
+   opencode run "$(specfirst --protocol starters/spec-review/protocol.yaml harden)"
+   ```
  
-2. **Finalize**:
+3. **Finalize**:
    ```bash
    opencode run "$(specfirst --protocol starters/spec-review/protocol.yaml finalize)"
    ```
@@ -92,7 +97,21 @@ opencode run "$(specfirst failure-modes ./spec-draft.md)" > failure-analysis.md
 
 Add risk mitigation to your spec based on findings.
 
-### 5. Calibrate Confidence
+### 5. Production Hardening
+
+Review your spec for production readiness:
+```bash
+opencode run "$(specfirst harden)" > hardening-report.md
+specfirst complete harden ./hardening-report.md
+```
+
+This analyzes your spec through the lens of:
+- **Assertive Programming**: What invariants must never be violated? (Crash if they are)
+- **Observability**: What context must every log line contain?
+- **Error Handling**: Which errors are recoverable vs. corrupt-state?
+- **Boring Code**: Any "clever" logic that should be simplified?
+
+### 6. Calibrate Confidence
 
 Identify areas where you're uncertain:
 ```bash
@@ -101,7 +120,7 @@ opencode run "$(specfirst calibrate ./spec-draft.md --mode confidence)" > confid
 
 Strengthen low-confidence areas or mark them as open questions.
 
-### 6. Check for Ambiguity
+### 7. Check for Ambiguity
 
 Surface vague language:
 ```bash
@@ -110,7 +129,7 @@ opencode run "$(specfirst calibrate ./spec-draft.md --mode uncertainty)" > ambig
 
 Clarify any ambiguous statements.
 
-### 7. Finalize
+### 8. Finalize
 
 Incorporate all feedback and create final spec:
 ```bash
@@ -118,7 +137,7 @@ opencode run "$(specfirst finalize)" > spec-final.md
 specfirst complete finalize ./spec-final.md
 ```
 
-### 8. Validate
+### 9. Validate
 
 Run quality checks:
 ```bash

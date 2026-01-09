@@ -114,8 +114,8 @@ var completeCmd = &cobra.Command{
 			}
 		}
 
-		// Delegate to App
-		if err := application.CompleteStage(stageID, outputFiles, completeForce, promptFile); err != nil {
+		// Delegate to App (pass context for graceful shutdown)
+		if err := application.CompleteStage(cmd.Context(), stageID, outputFiles, completeForce, promptFile); err != nil {
 			return err
 		}
 

@@ -39,11 +39,12 @@ func testRestoreCreateParams(t *testing.T) repository.CreateParams {
 }
 
 func TestArchiveRestoreCleansWorkspace(t *testing.T) {
-	// Setup workspace with "dirty" state (extra artifacts)
-	wd, _ := os.Getwd()
-	t.Cleanup(func() { os.Chdir(wd) })
+	// Setup isolated workspace using dependency injection (no os.Chdir)
 	tmp := t.TempDir()
-	os.Chdir(tmp)
+
+	// Inject the temp dir as the project root for this test execution
+	repository.SetRootDir(tmp)
+	t.Cleanup(func() { repository.ResetRootDir() })
 
 	// Create a "dirty" artifact that should be removed by restore
 	dirtyArtifact := repository.ArtifactsPath("requirements", "dirty.md")

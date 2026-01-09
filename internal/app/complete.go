@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -13,7 +14,12 @@ import (
 )
 
 // CompleteStage marks a stage as complete and stores outputs.
-func (app *Application) CompleteStage(stageID string, outputFiles []string, force bool, promptFile string) error {
+func (app *Application) CompleteStage(ctx context.Context, stageID string, outputFiles []string, force bool, promptFile string) error {
+	// Check context before starting
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+
 	stage, ok := app.Protocol.StageByID(stageID)
 	if !ok {
 		return fmt.Errorf("unknown stage: %s", stageID)
@@ -42,9 +48,13 @@ func (app *Application) CompleteStage(stageID string, outputFiles []string, forc
 		}
 	}
 
-	// Task List Validation
+	// Task List Validation (File I/O - check context)
 	if stage.Type == "decompose" {
 		for _, file := range outputFiles {
+			if err := ctx.Err(); err != nil {
+				return err
+			}
+
 			content, err := os.ReadFile(file)
 			if err != nil {
 				return fmt.Errorf("failed to read task file %s: %w", file, err)
@@ -70,9 +80,13 @@ func (app *Application) CompleteStage(stageID string, outputFiles []string, forc
 		}
 	}
 
-	// Store Artifacts
+	// Store Artifacts (File I/O - check context)
 	stored := make([]string, 0, len(outputFiles))
 	for _, output := range outputFiles {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+
 		resolved, err := filepath.Abs(output)
 		if err != nil {
 			return err
@@ -106,7 +120,11 @@ func (app *Application) CompleteStage(stageID string, outputFiles []string, forc
 		}
 	}
 
-	// Calculate Hash
+	// Calculate Hash (Potentially expensive - check context)
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+
 	var promptHashValue string
 	if promptFile != "" {
 		hash, err := utils.FileHash(promptFile)

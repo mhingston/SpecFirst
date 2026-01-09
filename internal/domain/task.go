@@ -3,6 +3,7 @@ package domain
 import (
 	"encoding/json"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"gopkg.in/yaml.v3"
@@ -59,25 +60,19 @@ func ParseTaskList(content string) (TaskList, error) {
 
 // extractCodeBlock tries to extract the content inside a markdown code block.
 func extractCodeBlock(content string) string {
-	start := strings.Index(content, "```")
-	if start == -1 {
-		return ""
+	// Handle standard markdown fences (```yaml or just ```)
+	// This regex captures content between fences, ignoring the language identifier
+	// (?s) enables dot to match newlines
+	// (?:\\w+)? optionally matches language identifier (yaml, json, etc.)
+	re := regexp.MustCompile("(?s)```(?:\\w+)?\\s*\\n(.*?)```")
+	matches := re.FindStringSubmatch(content)
+
+	if len(matches) > 1 {
+		return strings.TrimSpace(matches[1])
 	}
 
-	// Find the end of the opening backticks line
-	firstLineEnd := strings.Index(content[start:], "\n")
-	if firstLineEnd == -1 {
-		return ""
-	}
-	start += firstLineEnd + 1
-
-	end := strings.Index(content[start:], "```")
-	if end == -1 {
-		// No closing backticks, take the rest of the string
-		return strings.TrimSpace(content[start:])
-	}
-
-	return strings.TrimSpace(content[start : start+end])
+	// Fallback: return trimmed content if no blocks found (user might have pasted raw YAML)
+	return strings.TrimSpace(content)
 }
 
 // Validate checks for duplicate IDs and common errors in the task list.

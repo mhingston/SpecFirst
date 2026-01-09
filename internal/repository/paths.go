@@ -6,6 +6,23 @@ import (
 	"path/filepath"
 )
 
+var (
+	// rootDir allows tests to inject a specific root directory.
+	// If set, BaseDir() returns this instead of using os.Getwd().
+	rootDir string
+)
+
+// SetRootDir forces a specific root directory (useful for testing).
+// This should be called before any other path functions.
+func SetRootDir(path string) {
+	rootDir = path
+}
+
+// ResetRootDir clears the injected root directory, returning to normal behavior.
+func ResetRootDir() {
+	rootDir = ""
+}
+
 const (
 	SpecDir      = ".specfirst"
 	ArtifactsDir = "artifacts"
@@ -68,6 +85,11 @@ func ConfigPath() string {
 }
 
 func BaseDir() string {
+	// If a root directory has been injected (for testing), use it.
+	if rootDir != "" {
+		return rootDir
+	}
+
 	wd, err := os.Getwd()
 	if err != nil {
 		return "."

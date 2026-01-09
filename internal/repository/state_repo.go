@@ -2,9 +2,11 @@ package repository
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
+	"time"
 
 	"specfirst/internal/domain"
 )
@@ -94,14 +96,31 @@ func SaveState(path string, s domain.State) error {
 		return err
 	}
 
-	if runtime.GOOS == "windows" {
-		if err := os.Remove(path); err != nil && !os.IsNotExist(err) {
-			return err
+	// Robust Rename with Retry
+	// Windows often holds locks briefly (AV, Indexing, Backup). Retry helps avoid flakes.
+	var renameErr error
+	for attempt := 0; attempt < 5; attempt++ {
+		// On Windows, Rename fails if dest exists. We try to remove it first.
+		if runtime.GOOS == "windows" {
+			_ = os.Remove(path)
+		}
+
+		renameErr = os.Rename(tmpPath, path)
+		if renameErr == nil {
+			success = true
+			return nil
+		}
+
+		// If it's not a link/exist/permission error, fail immediately
+		if !os.IsExist(renameErr) && !os.IsPermission(renameErr) {
+			break
+		}
+
+		// Backoff before retry
+		if attempt < 4 {
+			time.Sleep(50 * time.Millisecond)
 		}
 	}
-	if err := os.Rename(tmpPath, path); err != nil {
-		return err
-	}
-	success = true
-	return nil
+
+	return fmt.Errorf("failed to save state after retries: %w", renameErr)
 }
