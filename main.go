@@ -9,7 +9,7 @@ import (
 //go:embed starters/*
 var startersFS embed.FS
 
-var version = "v0.6.7"
+var version = "v0.6.8"
 
 func main() {
 	starter.EmbeddedFS = startersFS

@@ -1,6 +1,6 @@
 # Example: Todo CLI
 
-This example demonstrates a full SpecFirst workflow, including requirements, design, and task-scoped implementation for a simple Todo CLI application.
+This example demonstrates a full SpecFirst workflow, including requirements clarification, design, and task-scoped implementation for a simple Todo CLI application.
 
 ## Setup
 
@@ -19,9 +19,9 @@ This example demonstrates a full SpecFirst workflow, including requirements, des
 
 You can run this example immediately using the `--protocol` override:
 
-1. **Requirements**:
+1. **Clarify Requirements**:
    ```bash
-   opencode run "$(specfirst --protocol starters/todo-cli/protocol.yaml reqs)"
+   opencode run "$(specfirst --protocol starters/todo-cli/protocol.yaml clarify)"
    ```
    
 2. **Design**:
@@ -33,12 +33,12 @@ You can run this example immediately using the `--protocol` override:
 
 After initializing the project, follow these steps:
 
-### 1. Requirements
+### 1. Clarify Requirements
 
 Generate application requirements:
 ```bash
-opencode run "$(specfirst reqs)" > requirements.md
-specfirst complete reqs ./requirements.md
+opencode run "$(specfirst clarify)" > requirements.md
+specfirst complete clarify ./requirements.md
 ```
 
 ### 2. Design

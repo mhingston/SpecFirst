@@ -1,10 +1,10 @@
 # Example: API Feature with Approvals
 
-A complete SpecFirst workflow demonstrating requirements, design with approvals, task decomposition, and implementation for a new API endpoint or feature.
+A complete SpecFirst workflow demonstrating requirements clarification, design with approvals, task decomposition, and implementation for a new API endpoint or feature.
 
 ## What This Demonstrates
 
-- Full 4-stage workflow (requirements → design → decompose → implementation)
+- Full 4-stage workflow (clarify → design → decompose → implementation)
 - Approval gates (architect and product must approve design)
 - Task decomposition for parallel development
 - Task-scoped implementation prompts
@@ -13,9 +13,9 @@ A complete SpecFirst workflow demonstrating requirements, design with approvals,
  
 You can run this example immediately using the `--protocol` override:
  
-1. **Requirements**:
+1. **Clarify Requirements**:
    ```bash
-   opencode run "$(specfirst --protocol starters/api-feature/protocol.yaml requirements)"
+   opencode run "$(specfirst --protocol starters/api-feature/protocol.yaml clarify)"
    ```
  
 2. **Design**:
@@ -47,16 +47,16 @@ To use this protocol in your own project:
 
 ## Workflow
 
-### 1. Gather Requirements
+### 1. Clarify Requirements
 
-Generate the requirements prompt:
+Generate the clarification prompt:
 ```bash
-opencode run "$(specfirst requirements)" > requirements.md
+opencode run "$(specfirst clarify)" > requirements.md
 ```
 
 Complete the stage:
 ```bash
-specfirst complete requirements ./requirements.md
+specfirst complete clarify ./requirements.md
 ```
 
 ### 2. Create Design

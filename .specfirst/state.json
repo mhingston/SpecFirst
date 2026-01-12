@@ -1,0 +1,14 @@
+{
+  "protocol": "api-feature",
+  "current_stage": "",
+  "completed_stages": [],
+  "started_at": "2026-01-12T09:37:37.337159Z",
+  "spec_version": "",
+  "stage_outputs": {},
+  "attestations": {},
+  "epistemics": {
+    "confidence": {
+      "overall": ""
+    }
+  }
+}

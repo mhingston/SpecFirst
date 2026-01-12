@@ -61,7 +61,7 @@ func InitializeWorkspace(opts InitOptions) error {
 		if err := writeIfMissing(repository.ProtocolsPath(assets.DefaultProtocolName+".yaml"), assets.DefaultProtocolYAML); err != nil {
 			return err
 		}
-		if err := writeIfMissing(repository.TemplatesPath("requirements.md"), assets.RequirementsTemplate); err != nil {
+		if err := writeIfMissing(repository.TemplatesPath("clarify.md"), assets.ClarifyTemplate); err != nil {
 			return err
 		}
 		if err := writeIfMissing(repository.TemplatesPath("design.md"), assets.DesignTemplate); err != nil {

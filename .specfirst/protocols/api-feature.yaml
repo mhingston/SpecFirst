@@ -1,0 +1,58 @@
+approvals:
+    - role: architect
+      stage: design
+    - role: product
+      stage: design
+description: Accelerates API development with specification-driven design, implementation, and verification.
+name: api-feature
+stages:
+    - id: clarify
+      intent: exploration
+      name: Requirements Clarification
+      outputs:
+        - requirements.md
+      template: api-feature/clarify.md
+      type: spec
+    - depends_on:
+        - clarify
+      id: design
+      inputs:
+        - requirements.md
+      intent: decision
+      name: API Design
+      outputs:
+        - design.md
+      template: api-feature/design.md
+      type: spec
+    - depends_on:
+        - clarify
+        - design
+      id: decompose
+      inputs:
+        - requirements.md
+        - design.md
+      intent: planning
+      name: Task Breakdown
+      outputs:
+        - tasks.yaml
+      prompt:
+        granularity: ticket
+        max_tasks: 10
+      template: api-feature/decompose.md
+      type: decompose
+    - depends_on:
+        - clarify
+        - design
+        - decompose
+      id: implementation
+      inputs:
+        - requirements.md
+        - design.md
+        - tasks.yaml
+      intent: execution
+      name: Implementation
+      outputs: []
+      source: decompose
+      template: api-feature/implementation.md
+      type: task_prompt
+version: "1.1"

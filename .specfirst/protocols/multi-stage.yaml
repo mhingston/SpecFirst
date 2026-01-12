@@ -1,0 +1,80 @@
+name: "multi-stage"
+version: "2.0"
+
+stages:
+  - id: requirements
+    name: Requirements Gathering
+    type: spec
+    intent: exploration
+    template: requirements.md
+    depends_on: []
+    outputs: [requirements.md]
+    output:
+      format: markdown
+      sections:
+        - Goals
+        - Non-Goals
+        - Assumptions
+        - Constraints
+        - Open Questions
+
+  - id: design
+    name: System Design
+    type: spec
+    intent: decision
+    template: design.md
+    depends_on: [requirements]
+    inputs: [requirements.md]
+    outputs: [design.md]
+    prompt:
+      intent: design_outline
+      rules:
+        - Do not propose implementation details
+        - Prefer interfaces over concrete choices
+    output:
+      format: markdown
+      sections:
+        - Architecture
+        - Components
+        - Interfaces
+        - Trade-offs
+
+  - id: decompose
+    name: Task Decomposition
+    type: decompose
+    intent: planning
+    template: decompose.md
+    depends_on: [requirements, design]
+    inputs: [requirements.md, design.md]
+    outputs: [tasks.yaml]
+    prompt:
+      intent: task_decomposition
+      granularity: ticket
+      max_tasks: 12
+      prefer_parallel: true
+      rules:
+        - Prefer parallelizable tasks
+        - Surface unknowns explicitly
+        - Tasks must be independently reviewable
+      required_fields:
+        - id
+        - title
+        - goal
+        - acceptance_criteria
+        - dependencies
+        - files_touched
+        - risk_level
+        - estimated_scope
+        - test_plan
+    output:
+      format: yaml
+
+  - id: implement
+    name: Implementation
+    type: task_prompt
+    intent: execution
+    template: implementation.md
+    depends_on: [requirements, design, decompose]
+    inputs: [requirements.md, design.md, tasks.yaml]
+    source: decompose
+    outputs: []

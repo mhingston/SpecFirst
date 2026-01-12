@@ -1,0 +1,48 @@
+name: todo-cli-protocol
+stages:
+    - id: clarify
+      intent: exploration
+      name: Requirements Clarification
+      outputs:
+        - requirements.md
+      template: todo-cli/clarify.md
+      type: spec
+    - depends_on:
+        - clarify
+      id: design
+      inputs:
+        - requirements.md
+      name: System Design
+      outputs:
+        - design.md
+      template: todo-cli/design.md
+      type: spec
+    - depends_on:
+        - clarify
+        - design
+      id: breakdown
+      inputs:
+        - requirements.md
+        - design.md
+      name: Task Decomposition
+      outputs:
+        - tasks.yaml
+      prompt:
+        granularity: ticket
+        max_tasks: 5
+      template: todo-cli/decompose.md
+      type: decompose
+    - depends_on:
+        - clarify
+        - design
+        - breakdown
+      id: codes
+      inputs:
+        - requirements.md
+        - design.md
+        - tasks.yaml
+      name: Task Implementation
+      source: breakdown
+      template: todo-cli/implementation.md
+      type: task_prompt
+version: "1.1"

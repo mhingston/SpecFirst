@@ -1,13 +1,13 @@
 name: "api-feature"
 description: Accelerates API development with specification-driven design, implementation, and verification.
-version: "1.0"
+version: "1.1"
 
 stages:
-  - id: requirements
-    name: Requirements Gathering
+  - id: clarify
+    name: Requirements Clarification
     type: spec
     intent: exploration
-    template: requirements.md
+    template: clarify.md
     outputs: [requirements.md]
     
   - id: design
@@ -15,7 +15,7 @@ stages:
     type: spec
     intent: decision
     template: design.md
-    depends_on: [requirements]
+    depends_on: [clarify]
     inputs: [requirements.md]
     outputs: [design.md]
     
@@ -24,8 +24,8 @@ stages:
     type: decompose
     intent: planning
     template: decompose.md
-    depends_on: [design]
-    inputs: [design.md]
+    depends_on: [clarify, design]
+    inputs: [requirements.md, design.md]
     outputs: [tasks.yaml]
     prompt:
       granularity: ticket
@@ -36,7 +36,7 @@ stages:
     type: task_prompt
     intent: execution
     template: implementation.md
-    depends_on: [requirements, design, decompose]
+    depends_on: [clarify, design, decompose]
     inputs: [requirements.md, design.md, tasks.yaml]
     source: decompose
     outputs: []

@@ -1,18 +1,19 @@
 name: "todo-cli-protocol"
-version: "1.0"
+version: "1.1"
 
 stages:
-  - id: reqs
-    name: Todo CLI Requirements
+  - id: clarify
+    name: Requirements Clarification
     type: spec
-    template: requirements.md
+    intent: exploration
+    template: clarify.md
     outputs: [requirements.md]
 
   - id: design
     name: System Design
     type: spec
     template: design.md
-    depends_on: [reqs]
+    depends_on: [clarify]
     inputs: [requirements.md]
     outputs: [design.md]
 
@@ -20,7 +21,7 @@ stages:
     name: Task Decomposition
     type: decompose
     template: decompose.md
-    depends_on: [reqs, design]
+    depends_on: [clarify, design]
     inputs: [requirements.md, design.md]
     outputs: [tasks.yaml]
     prompt:
@@ -31,6 +32,6 @@ stages:
     name: Task Implementation
     type: task_prompt
     template: implementation.md
-    depends_on: [reqs, design, breakdown]
+    depends_on: [clarify, design, breakdown]
     inputs: [requirements.md, design.md, tasks.yaml]
     source: breakdown
