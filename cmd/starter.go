@@ -86,7 +86,8 @@ and templates to .specfirst/templates/.
 
 By default, existing files are not overwritten. Use --force to overwrite.
 By default, config.yaml is updated to use the new protocol. Use --no-config to skip.`,
-	Args: cobra.ExactArgs(1),
+	Args:              cobra.ExactArgs(1),
+	ValidArgsFunction: starterNameCompletions,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		name := args[0]
 
@@ -120,4 +121,8 @@ func init() {
 
 	starterApplyCmd.Flags().BoolVar(&starterForce, "force", false, "overwrite existing templates and protocols")
 	starterApplyCmd.Flags().BoolVar(&starterNoConfig, "no-config", false, "do not update config.yaml with new protocol")
+
+	_ = starterListCmd.RegisterFlagCompletionFunc("source", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return filterPrefix([]string{"all", "builtin", "local"}, toComplete), cobra.ShellCompDirectiveNoFileComp
+	})
 }

@@ -91,3 +91,27 @@ go build .
 ### From GitHub Releases
 
 Download the pre-built binary for your platform from [Releases](https://github.com/mhingston/SpecFirst/releases).
+
+## Shell Completion
+
+Generate completion scripts for your shell:
+
+```bash
+specfirst completion zsh
+specfirst completion bash
+specfirst completion fish
+specfirst completion powershell
+```
+
+Common installs:
+
+```bash
+# zsh (one-time install)
+specfirst completion zsh > "${fpath[1]}/_specfirst"
+
+# bash (Homebrew path)
+specfirst completion bash > /usr/local/etc/bash_completion.d/specfirst
+
+# fish
+specfirst completion fish > ~/.config/fish/completions/specfirst.fish
+```

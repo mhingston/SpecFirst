@@ -15,9 +15,10 @@ import (
 var completeForce bool
 
 var completeCmd = &cobra.Command{
-	Use:   "complete <stage-id> <output-files...>",
-	Short: "Mark a stage as complete and store outputs",
-	Args:  cobra.MinimumNArgs(1),
+	Use:               "complete <stage-id> <output-files...>",
+	Short:             "Mark a stage as complete and store outputs",
+	Args:              cobra.MinimumNArgs(1),
+	ValidArgsFunction: stageIDThenFilesCompletions,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		stageID := args[0]
 		var outputFiles []string

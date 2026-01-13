@@ -63,9 +63,10 @@ var archiveListCmd = &cobra.Command{
 }
 
 var archiveShowCmd = &cobra.Command{
-	Use:   "show <version>",
-	Short: "Show archive metadata",
-	Args:  cobra.ExactArgs(1),
+	Use:               "show <version>",
+	Short:             "Show archive metadata",
+	Args:              cobra.ExactArgs(1),
+	ValidArgsFunction: archiveVersionCompletions,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if !domain.IsValidSnapshotName(args[0]) {
 			return fmt.Errorf("invalid snapshot name: %s", args[0])
@@ -82,9 +83,10 @@ var archiveShowCmd = &cobra.Command{
 }
 
 var archiveRestoreCmd = &cobra.Command{
-	Use:   "restore <version>",
-	Short: "Restore an archive snapshot into .specfirst",
-	Args:  cobra.ExactArgs(1),
+	Use:               "restore <version>",
+	Short:             "Restore an archive snapshot into .specfirst",
+	Args:              cobra.ExactArgs(1),
+	ValidArgsFunction: archiveVersionCompletions,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		version := args[0]
 		force, _ := cmd.Flags().GetBool("force")
@@ -119,6 +121,12 @@ var archiveCompareCmd = &cobra.Command{
 	Use:   "compare <version-a> <version-b>",
 	Short: "Compare archived artifacts between versions",
 	Args:  cobra.ExactArgs(2),
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		if len(args) > 1 {
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		}
+		return filterPrefix(loadArchiveVersions(), toComplete), cobra.ShellCompDirectiveNoFileComp
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		repo := repository.NewSnapshotRepository(repository.ArchivesPath())
 		added, removed, changed, err := repo.Compare(args[0], args[1])

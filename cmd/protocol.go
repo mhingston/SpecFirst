@@ -50,9 +50,10 @@ var protocolListCmd = &cobra.Command{
 }
 
 var protocolShowCmd = &cobra.Command{
-	Use:   "show <name>",
-	Short: "Show a protocol definition",
-	Args:  cobra.ExactArgs(1),
+	Use:               "show <name>",
+	Short:             "Show a protocol definition",
+	Args:              cobra.ExactArgs(1),
+	ValidArgsFunction: protocolNameCompletions,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		name := args[0]
 		// Validate protocol name to prevent path traversal

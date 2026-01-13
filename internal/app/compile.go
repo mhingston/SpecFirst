@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 
 	"specfirst/internal/domain"
 	"specfirst/internal/engine/templating"
@@ -92,6 +93,9 @@ func (app *Application) CompilePrompt(stage domain.Stage, stageIDs []string, opt
 	}
 
 	templatePath := repository.TemplatesPath(stage.Template)
+	if err := ensureTemplateExists(stage, templatePath); err != nil {
+		return "", err
+	}
 	return templating.Render(templatePath, data)
 }
 
@@ -136,4 +140,59 @@ func listAllArtifacts() ([]templating.Input, error) {
 		inputs = append(inputs, templating.Input{Name: rel, Content: string(data)})
 	}
 	return inputs, nil
+}
+
+func ensureTemplateExists(stage domain.Stage, templatePath string) error {
+	info, err := os.Stat(templatePath)
+	if err == nil {
+		if info.IsDir() {
+			return fmt.Errorf("stage %q template %q is a directory: %s", stage.ID, stage.Template, templatePath)
+		}
+		return nil
+	}
+	if !os.IsNotExist(err) {
+		return fmt.Errorf("checking template %s: %w", templatePath, err)
+	}
+
+	templatesDir := repository.TemplatesPath()
+	dirInfo, dirErr := os.Stat(templatesDir)
+	if dirErr != nil || !dirInfo.IsDir() {
+		return fmt.Errorf("missing template for stage %q: %s (templates directory not found at %s; %s)", stage.ID, stage.Template, templatesDir, templateMissingHint())
+	}
+
+	available, listErr := listTemplateFiles(templatesDir)
+	if listErr != nil {
+		return fmt.Errorf("missing template for stage %q: %s (failed to list templates: %w; %s)", stage.ID, stage.Template, listErr, templateMissingHint())
+	}
+	if len(available) == 0 {
+		return fmt.Errorf("missing template for stage %q: %s (no templates found in %s; %s)", stage.ID, stage.Template, templatesDir, templateMissingHint())
+	}
+	return fmt.Errorf("missing template for stage %q: %s (available: %s; %s)", stage.ID, stage.Template, strings.Join(available, ", "), templateMissingHint())
+}
+
+func listTemplateFiles(root string) ([]string, error) {
+	paths := []string{}
+	err := filepath.WalkDir(root, func(path string, entry os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		rel, err := filepath.Rel(root, path)
+		if err != nil {
+			return err
+		}
+		paths = append(paths, filepath.ToSlash(rel))
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	sort.Strings(paths)
+	return paths, nil
+}
+
+func templateMissingHint() string {
+	return "hint: run `specfirst init` to create defaults or `specfirst starter apply <name>` to install a starter"
 }

@@ -9,9 +9,10 @@ import (
 )
 
 var attestCmd = &cobra.Command{
-	Use:   "attest <stage-id>",
-	Short: "Record an attestation for a stage",
-	Args:  cobra.ExactArgs(1),
+	Use:               "attest <stage-id>",
+	Short:             "Record an attestation for a stage",
+	Args:              cobra.ExactArgs(1),
+	ValidArgsFunction: stageIDCompletions,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		stageID := args[0]
 		role, _ := cmd.Flags().GetString("role")
@@ -58,4 +59,9 @@ func init() {
 	attestCmd.Flags().String("by", "", "who is attesting (defaults to $USER)")
 	attestCmd.Flags().String("rationale", "", "rationale or notes")
 	attestCmd.Flags().StringSlice("condition", []string{}, "conditions for approval (repeatable)")
+
+	_ = attestCmd.RegisterFlagCompletionFunc("role", attestRoleCompletions)
+	_ = attestCmd.RegisterFlagCompletionFunc("status", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return filterPrefix([]string{"approved", "approved_with_conditions", "needs_changes", "rejected"}, toComplete), cobra.ShellCompDirectiveNoFileComp
+	})
 }

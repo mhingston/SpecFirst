@@ -63,6 +63,21 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&stagePreferParallel, "prefer-parallel", false, "prefer parallelizable tasks")
 	rootCmd.PersistentFlags().StringVar(&stageRiskBias, "risk-bias", "balanced", "risk bias: conservative, balanced, fast")
 
+	rootCmd.ValidArgsFunction = stageIDCompletions
+
+	_ = rootCmd.RegisterFlagCompletionFunc("protocol", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return filterPrefix(loadProtocolNames(), toComplete), cobra.ShellCompDirectiveDefault
+	})
+	_ = rootCmd.RegisterFlagCompletionFunc("format", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return filterPrefix([]string{"text", "json", "yaml", "shell"}, toComplete), cobra.ShellCompDirectiveNoFileComp
+	})
+	_ = rootCmd.RegisterFlagCompletionFunc("granularity", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return filterPrefix([]string{"feature", "story", "ticket", "commit"}, toComplete), cobra.ShellCompDirectiveNoFileComp
+	})
+	_ = rootCmd.RegisterFlagCompletionFunc("risk-bias", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return filterPrefix([]string{"conservative", "balanced", "fast"}, toComplete), cobra.ShellCompDirectiveNoFileComp
+	})
+
 	rootCmd.AddCommand(initCmd)
 	rootCmd.AddCommand(starterCmd)
 	rootCmd.AddCommand(statusCmd)

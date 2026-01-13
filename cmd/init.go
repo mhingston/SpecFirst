@@ -103,4 +103,6 @@ func init() {
 	initCmd.Flags().StringVar(&initStarter, "starter", "", "initialize with a specific starter kit")
 	initCmd.Flags().BoolVar(&initChoose, "choose", false, "interactively select a starter kit")
 	initCmd.Flags().BoolVar(&initForce, "force", false, "overwrite existing templates/protocols")
+
+	_ = initCmd.RegisterFlagCompletionFunc("starter", starterNameCompletions)
 }
