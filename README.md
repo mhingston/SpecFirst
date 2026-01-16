@@ -1,5 +1,7 @@
 # SpecFirst
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/mhingston/specfirst)
+
 SpecFirst is a Go CLI for specification-driven workflows that focuses on **prompt quality, clarity, and human judgment**.
 
 **Why SpecFirst?**
